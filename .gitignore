@@ -1,0 +1,9 @@
+# Intellij
+.idea/
+cmake-build-debug/
+
+# VScode
+.vscode/
+
+# Mac
+.DS_Store/
