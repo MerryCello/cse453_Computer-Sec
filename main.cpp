@@ -1,8 +1,3 @@
-/*******************************************************************
- * This week we will simulate a homograph attack attack and write the
- * code necessary to mitigate against it. This lab will be conducted
- * in our teams and will be submitted as a report.
- * *****************************************************************/
 #include <iostream>
 #include <string>
 #include "pathDebunker.h"
@@ -42,9 +37,12 @@ int main() {
 }
 
 
-/**
+/*******************************************************************
  * WEEK 5 LAB
- */
+ * This week we will simulate a homograph attack attack and write the
+ * code necessary to mitigate against it. This lab will be conducted
+ * in our teams and will be submitted as a report.
+ * *****************************************************************/
 void pathDebunker() {
 #ifndef JUST_TESTS
    string path1 = retrievePath();
