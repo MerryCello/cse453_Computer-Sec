@@ -49,20 +49,24 @@ int main() {
    return 0;
 }
 
+/*******************************************************************
+ * genQuery():
+ *      - Returns a SQL SELECT statement.
+ *******************************************************************/
 string genQuery(string username, string password) {
     return "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
 }
 
 /*******************************************************************
- * Weak Filter:
- *      - Strip the username and password of <, >, &, ;, "", etc.
+ * genQueryWeak():
+ *      - Strip the username and password of <>&;"-='
  *******************************************************************/
 string genQueryWeak(string username, string password) {
    // SELECT authenticate FROM passwordList WHERE name='$Username' and passwd='$Password'
    string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
    string cleanQuery;
    for (char & c : sqlQuery) {
-      char invalidChars[] = {'<', '>', '&', ';', '"', '-'};
+      char invalidChars[] = {'<', '>', '&', ';', '"', '-', '=', '\'', ' '};
       for (char invalidChar : invalidChars) {
          if (c == invalidChar) {
             cleanQuery += "";
@@ -78,9 +82,9 @@ string genQueryWeak(string username, string password) {
 }
 
 /*******************************************************************
- * Strong Filter:
+ * genQueryStrong():
  *       - Username: Allow only letters, numbers, ., and _
- *       - Password: Allow only letters, numbers, and special characters (!@#$%^&*._)
+ *       - Password: Allow only letters, numbers, and special characters (!@#$%^&:*._)
  *******************************************************************/
 string genQueryStrong(string username, string password) {
    // Don't know for sure if solution works, but it should
@@ -92,7 +96,7 @@ string genQueryStrong(string username, string password) {
    }
    for (char c : password) {
       string s(1, c);
-      if (isalnum(c) || regex_match(s, regex("[\\w!@#$%^&*_.]")))
+      if (isalnum(c) || regex_match(s, regex("[\\w!@#$%^&:*_.]")))
          cleanPassword += c;
    }
 
@@ -174,31 +178,35 @@ void runTestCases(char mitigationType) {
    if (mitigationType == 'a') {
       cout << setGroupTitle << endl;
 
-      int testsPassedCount = 0;
+      int totalTestsPassedCount = 0;
       for (TestSet & testSet : testSets) {
+         int testsPassedCount = 0;
          cout << "   Running set \"" << testSet.title << "\"...\n";
          testValid(testSet);
          testTautology(testSet);
          testUnion(testSet);
          testAddState(testSet);
          testComment(testSet);
+         totalTestsPassedCount += testSet.testsPassedCount;
          testsPassedCount += testSet.testsPassedCount;
          cout << "   **************************************************************************\n"
-              << "   *  " << testSet.testsPassedCount << "/25 tests passed for \"" << testSet.title << "\"\n"
+              << "   *  " << testsPassedCount << "/25 tests passed for \"" << testSet.title << "\"\n"
               << "   **************************************************************************\n\n";
       }
       cout << "==========================================================================\n"
-           << "|| TOTAL: " << testsPassedCount << "/" << 3*25 << " tests passed\n"
+           << "|| TOTAL: " << totalTestsPassedCount << "/" << 3*25 << " tests passed\n"
            << "==========================================================================\n\n";
    }
    /// Run the specified test
    else {
       cout << "Running set \"" << testSets[0].title << "\"...\n";
+      int testsPassedCount = 0;
       testValid(testSets[0]);
       testTautology(testSets[0]);
       testUnion(testSets[0]);
       testAddState(testSets[0]);
       testComment(testSets[0]);
+      testsPassedCount += testSets[0].testsPassedCount;
 
       cout << "**************************************************************************\n"
            << "*  " << testSets[0].testsPassedCount << "/25 tests passed for \"" << testSets[0].title << "\"\n"
@@ -214,11 +222,11 @@ void testValid(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
       // { username, password, expected output }
-           { Credentials("Jane Doe", "7593156"), "", errorMessage }, // Jared
-           { Credentials("w4shingt0nx4vier", "509@pp1e"), "", errorMessage }, // Paul
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage }
+           { Credentials("Jane_Doe", "7593156"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='7593156';", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier", "509@pp1e"), "SELECT authenticate FROM passwordList WHERE name='w4shingt0nx4vier' and passwd='509@pp1e';", errorMessage }, // Paul
+           { Credentials("Brian_064", "123secret123"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='123secret123';", errorMessage }, //Brian
+           { Credentials("Kevin123456", "wh@t$MyPassw0rd"), "SELECT authenticate FROM passwordList WHERE name='Kevin123456' and passwd='wh@t$MyPassw0rd';", errorMessage }, // Kevin
+           { Credentials("simpleWords", "********"), "SELECT authenticate FROM passwordList WHERE name='simpleWords' and passwd='********';", errorMessage } //chris1
    };
 
    /// test & validate
@@ -239,9 +247,9 @@ void testTautology(TestSet& testSet) {
            // { username, password, expected output }
            { Credentials("Jane Doe", "fake_password' OR 'x' = 'x"), "", errorMessage }, // Jared
            { Credentials("w4shingt0nx4vier", "this_should_work' OR 'a' = 'a"), "", errorMessage }, // Paul
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage }
+           { Credentials("Brian_064", "lol' OR '1' = '1"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='lolOR11';", errorMessage }, //Brian
+           { Credentials("alexanderHamilton#1776", "c' OR 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='alexanderHamilton#1776' and passwd='cORcc';", errorMessage }, // Kevin
+           { Credentials("homeStarLegend%$#", "takingout OR date"), "SELECT authenticate FROM passwordList WHERE name='homeStarLegend%$#' and passwd='takingoutORdate';", errorMessage } //chris2
    };
 
    /// test & validate
@@ -260,13 +268,12 @@ void testUnion(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("Jane Doe", "testing' UNION INSERT INTO  passwordList VALUES('Jane Doe', 'my_password')"), "", errorMessage }, //Jared
-           { Credentials("w4shingt0nx4vier", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage }
+           { Credentials("Jane Doe", "testing' UNION INSERT INTO  passwordList(name, passwd) VALUES('Jane Doe', 'my_password')"), "", errorMessage }, //Jared
+           { Credentials("w4shingt0nx4vier", "this_should_work' UNION INSERT INTO passwordList(name, passwd) VALUES ('w4shingt0nx4vier', '509@pp1e')"), "", errorMessage }, // Paul
+           { Credentials("Brian", "myPassword' UNION SELECT * FROM passwordList;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='myPasswordUNIONSELECTFROMpasswordList';", errorMessage }, //Brian
+           { Credentials("ronWeasly", "alohamora' UNION SELECT * FROM passwordList WHERE 'x'='x"), "SELECT authenticate FROM passwordList WHERE name='ronWeasly' and passwd='alohamoraUNIONSELECT*FROMpasswordListWHERExx';", errorMessage }, // Kevin
+           { Credentials("wizardgandolf", "you are being hacked UNION SELECT "), "SELECT authenticate FROM passwordList WHERE name='wizardgandolf' and passwd='thisisthewizardpassword';", errorMessage } // chris3
    };
-
    /// test & validate
    runTests(testSet);
 
@@ -284,10 +291,10 @@ void testAddState(TestSet& testSet) {
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane Doe", "0; SELECT password FROM passwordList"), "", errorMessage }, // Jared
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage }
+           { Credentials("w4shingt0nx4vier", "this_should_work'; SELECT * FROM passwordList WHERE password LIKE '%5%"), "", errorMessage }, // Paul
+           { Credentials("Brian_064", "mypassWord'; DELETE FROM table;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='mypassWordDELETEFROMtable';", errorMessage }, //Brian
+           { Credentials("brian_is_cool", "000'; SELECT * FROM passwordList where 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='brian_is_cool' and passwd='000;SELECT*FROMpasswordListwherecc';", errorMessage }, // Kevin
+           { Credentials("", ""), "SELECT authenticate FROM passwordList WHERE name='' and passwd='';", errorMessage } //chris4
    };
 
    /// test & validate
@@ -307,10 +314,10 @@ void testComment(TestSet& testSet) {
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane Doe'--", "false_password"), "", errorMessage }, // Jared
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage }
+           { Credentials("w4shingt0nx4vier'; --", "509@pp1e'; --"), "", errorMessage }, // Paul
+           { Credentials("Brian_064' --", "anyPassWord"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='anyPassWord';", errorMessage }, //Brian
+           { Credentials("chris_is_awesome", "5stars'; -- this_is_a_comment:_"), "SELECT authenticate FROM passwordList WHERE name='chris_is_awesome' and passwd='5starsthis_is_a_comment_';", errorMessage }, // Kevin
+           { Credentials("", ""), "SELECT authenticate FROM passwordList WHERE name='' and passwd='';", errorMessage }//chris5
    };
 
    /// test & validate
@@ -324,6 +331,7 @@ void testComment(TestSet& testSet) {
  void runTests(TestSet & testSet) {
     cout << "\t" << testSet.name << ":\n";
 
+    int testsPassedCount = 0;
     for (int i = 0; i < testSet.testsNumber; i++) {
        const string username = testSet.testCases[i].input.username;
        const string password = testSet.testCases[i].input.password;
@@ -338,6 +346,7 @@ void testComment(TestSet& testSet) {
        if (actualOutput == testSet.testCases[i].expectedOutput) {
          testSet.testCases[i].status = PASSED;
          testSet.testsPassedCount++;
+         testsPassedCount++;
          cout << "\t      PASSED: Nothing was injected\n";
        } else {
          testSet.testCases[i].status = FAILED;
@@ -349,6 +358,6 @@ void testComment(TestSet& testSet) {
 
     /// Total
     cout << "\t==========================================================================\n"
-         << "\t|| " << testSet.testsPassedCount << "/" << testSet.testsNumber << " tests passed for " << testSet.name << endl
+         << "\t|| " << testsPassedCount << "/" << testSet.testsNumber << " tests passed for " << testSet.name << endl
          << "\t==========================================================================\n\n";
  }
