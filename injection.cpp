@@ -87,7 +87,7 @@ string genQueryStrong(string username, string password) {
    string cleanUsername;
    string cleanPassword;
    for (char c : username) {
-      if (isalnum(c) || c == '.' || c == '_'))
+      if (isalnum(c) || c == '.' || c == '_')
          cleanUsername += c;
    }
    for (char c : password) {
@@ -237,8 +237,8 @@ void testTautology(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("Jane Doe", "'fake_password' OR 'x' = 'x'"), "", errorMessage }, // Jared
-           { Credentials("w4shingt0nx4vier", ""), "", errorMessage }, // Paul
+           { Credentials("Jane Doe", "fake_password' OR 'x' = 'x"), "", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier", "this_should_work' OR 'a' = 'a"), "", errorMessage }, // Paul
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage }
@@ -261,7 +261,7 @@ void testUnion(TestSet& testSet) {
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane Doe", "testing' UNION INSERT INTO  passwordList VALUES('Jane Doe', 'my_password')"), "", errorMessage }, //Jared
-           { Credentials("", ""), "", errorMessage },
+           { Credentials("w4shingt0nx4vier", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage }
