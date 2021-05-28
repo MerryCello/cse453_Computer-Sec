@@ -1,6 +1,6 @@
 # Intellij
 .idea/
-cmake-build-debug/
+cmake-build-debug**/
 
 # VScode
 .vscode/
