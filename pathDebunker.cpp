@@ -8,9 +8,56 @@
 #include <list>
 #include <sstream>
 #include <algorithm>
-#include "pathDebunker.h"
 
 using namespace std;
+
+// #define JUST_TESTS
+#define RESET  "\x1B[0m"
+#define RED  "\x1B[31m"
+#define GREEN  "\x1B[32m"
+#define YELLOW  "\x1B[33m"
+#define BLUE  "\x1B[34m"
+#define MAGNA  "\x1B[35m"
+#define CYAN  "\x1B[36m"
+#define WHITE  "\x1B[37m"
+
+
+string retrievePath();
+string canonizePath(string &);
+list<string> split(string, char);
+list<string> simplifyPath(list<string>::iterator currentDir,
+                          list<string> & inputPath);
+bool pathsAreHomographs(string, string);
+void runTests();
+bool test1();
+bool test2();
+bool test3();
+bool test4();
+bool test5();
+bool test6();
+void detailedTestCaseReport(string, string, string, string);
+
+
+int main() {
+#ifndef JUST_TESTS
+   string path1 = retrievePath();
+   cout << "Again, ";
+   string path2 = retrievePath();
+
+   if (pathsAreHomographs(path1, path2)) {
+      cout << endl << "Sorry, this program is homographophobic. Paths are homographs, ew!" << endl;
+   } else {
+      cout << "Hmmmm Path aren't homographs!" << endl;
+   }
+#endif
+
+   // Tests
+   runTests();
+
+   // Is there more we need to do?
+
+   return 0;
+}
 
 
 /**
@@ -198,7 +245,7 @@ bool test1() {
    // Setup
    string actualPath1 =  "/home/cs453/week05/test.txt";
    string path1 = "~/cs453/./week05/././test.txt";
-   
+
    string actualPath2 =  "/home/cs453/week05/test.txt";
    string path2 = "home/./cs453/week05/test.txt";
 
@@ -218,7 +265,7 @@ bool test2() {
    // Setup
    string actualPath1 = "/home/cs453/week05/week05/test.txt";
    string path1 = "~/cs453/week05/./week05/./././test.txt";
-   
+
    string actualPath2 = "/home/cs453/week05/week05/test.txt";
    string path2 = "home/./cs453/../cs453/week05/./week05/./test.txt";
 
@@ -257,7 +304,7 @@ bool test4() {
    // Setup
    string actualPath1 = "/home/cs453/week05/test.txt";
    string path1 = "~/./cs453/./week05/./././././test.txt";
-   
+
    string actualPath2 = "/home/week05/test.txt";
    string path2 = "~/./cs453/../week05/././test.txt";
 
@@ -277,7 +324,7 @@ bool test5() {
    // Setup
    string actualPath1 = "/home/week04/test.txt";
    string path1 = "~/../week04/test.txt";
-   
+
    string actualPath2 = "/home/week05/test.txt";
    string path2 = "~/../week05/test.txt";
 
@@ -317,7 +364,7 @@ void detailedTestCaseReport(string actualPath1, string inputPath1,
                             string actualPath2, string inputPath2) {
    cout << "\t1. \"Actual path\" >>> \"input path\":\n"
         << "\t   \"" << actualPath1 << "\" >>> \"" << inputPath1 << "\"" << endl;
-   
+
    cout << "\t2. \"Actual path\" >>> \"input path\":\n"
         << "\t   \"" << actualPath2 << "\" >>> \"" << inputPath2 << "\"" << endl;
 }
