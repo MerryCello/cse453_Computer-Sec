@@ -26,7 +26,7 @@ int main() {
         << "   r => Run tests on regular genQuery\n"
         << "   w => Run tests on weak    genQuery\n"
         << "   s => Run tests on strong  genQuery\n"
-        << "   a => Run tests on on all genQueries\n\n";
+        << "   a => Run tests on on all  genQueries\n\n";
    bool wrongInputOption;
    do {
       cout << "> ";
@@ -54,15 +54,15 @@ string genQuery(string username, string password) {
 }
 
 /*******************************************************************
- * Weak Filter: 
- *      - Strip the username and password of <, >, &, ;, "", etc. 
+ * Weak Filter:
+ *      - Strip the username and password of <, >, &, ;, "", etc.
  *******************************************************************/
 string genQueryWeak(string username, string password) {
    // SELECT authenticate FROM passwordList WHERE name='$Username' and passwd='$Password'
    string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
    string cleanQuery;
    for (char & c : sqlQuery) {
-      char invalidChars[] = {'<', '>', '&', ';', '"'};
+      char invalidChars[] = {'<', '>', '&', ';', '"', '-'};
       for (char invalidChar : invalidChars) {
          if (c == invalidChar) {
             cleanQuery += "";
@@ -87,16 +87,12 @@ string genQueryStrong(string username, string password) {
    string cleanUsername;
    string cleanPassword;
    for (char c : username) {
-      if (!isalnum(c) && c != '.' && c != '_')
-         cleanUsername += "";
-      else
+      if (isalnum(c) || c == '.' || c == '_'))
          cleanUsername += c;
    }
    for (char c : password) {
       string s(1, c);
-      if (!isalnum(c) && !regex_match(s, regex("[\\w!@#$%^&*_.]")))
-         cleanPassword += "";
-      else
+      if (isalnum(c) || regex_match(s, regex("[\\w!@#$%^&*_.]")))
          cleanPassword += c;
    }
 
@@ -218,8 +214,8 @@ void testValid(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
       // { username, password, expected output }
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
+           { Credentials("Jane Doe", "7593156"), "", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier", "509@pp1e"), "", errorMessage }, // Paul
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage }
@@ -241,8 +237,8 @@ void testTautology(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("", ""), "", errorMessage },
-           { Credentials("", ""), "", errorMessage },
+           { Credentials("Jane Doe", "'fake_password' OR 'x' = 'x'"), "", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier", ""), "", errorMessage }, // Paul
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage }
@@ -264,7 +260,7 @@ void testUnion(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("", ""), "", errorMessage },
+           { Credentials("Jane Doe", "testing' UNION INSERT INTO  passwordList VALUES('Jane Doe', 'my_password')"), "", errorMessage }, //Jared
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
@@ -287,7 +283,7 @@ void testAddState(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("", ""), "", errorMessage },
+           { Credentials("Jane Doe", "0; SELECT password FROM passwordList"), "", errorMessage }, // Jared
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
@@ -310,7 +306,7 @@ void testComment(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("", ""), "", errorMessage },
+           { Credentials("Jane Doe'--", "false_password"), "", errorMessage }, // Jared
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
            { Credentials("", ""), "", errorMessage },
