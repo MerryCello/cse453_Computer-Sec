@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <regex>
 
 using namespace std;
 typedef string (*GenQueryFunction)(string, string);
@@ -79,12 +80,29 @@ string genQueryWeak(string username, string password) {
 
 /*******************************************************************
  * Strong Filter:
- *       - Allow only letters, numbers, and _
+ *       - Username: Allow only letters, numbers, ., and _
+ *       - Password: Allow only letters, numbers, and special characters (!@#$%^&*._)
  *******************************************************************/
-string genQueryStrong(string username, string password){
-    // SELECT authenticate FROM passwordList WHERE name='$Username' and passwd='$Password'
-    string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
-    return sqlQuery;
+string genQueryStrong(string username, string password) {
+   // Don't know for sure if solution works, but it should
+   string cleanUsername;
+   string cleanPassword;
+   for (char c : username) {
+      if (!isalnum(c) && c != '.' && c != '_')
+         cleanUsername += "";
+      else
+         cleanUsername += c;
+   }
+   for (char c : password) {
+      string s(1, c);
+      if (!isalnum(c) && !regex_match(s, regex("[\\w!@#$%^&*_.]")))
+         cleanPassword += "";
+      else
+         cleanPassword += c;
+   }
+
+   string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + cleanUsername + "' and passwd='" + cleanPassword + "';";
+   return sqlQuery;
 }
 
 
