@@ -232,7 +232,7 @@ void testValid(TestSet& testSet) {
    /// test & validate
    runTests(testSet);
 
-   delete testSet.testCases;
+   //delete testSet.testCases;
    testSet.testCases = nullptr;
 }
 
@@ -247,7 +247,7 @@ void testTautology(TestSet& testSet) {
            // { username, password, expected output }
            { Credentials("Jane Doe", "fake_password' OR 'x' = 'x"), "", errorMessage }, // Jared
            { Credentials("w4shingt0nx4vier", "this_should_work' OR 'a' = 'a"), "", errorMessage }, // Paul
-           { Credentials("Brian_064", "lol' OR '1' = '1"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='lolOR11';", errorMessage }, //Brian
+           { Credentials("Brian_064", "lol' OR '1' = '1"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='lol' OR '1' = '1';", errorMessage }, //Brian
            { Credentials("alexanderHamilton#1776", "c' OR 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='alexanderHamilton#1776' and passwd='cORcc';", errorMessage }, // Kevin
            { Credentials("homeStarLegend%$#", "takingout OR date"), "SELECT authenticate FROM passwordList WHERE name='homeStarLegend%$#' and passwd='takingoutORdate';", errorMessage } //chris2
    };
@@ -255,7 +255,7 @@ void testTautology(TestSet& testSet) {
    /// test & validate
    runTests(testSet);
 
-   delete testSet.testCases;
+   //delete testSet.testCases;
    testSet.testCases = nullptr;
 }
 
@@ -277,7 +277,7 @@ void testUnion(TestSet& testSet) {
    /// test & validate
    runTests(testSet);
 
-   delete testSet.testCases;
+   //delete testSet.testCases;
    testSet.testCases = nullptr;
 }
 
@@ -292,7 +292,7 @@ void testAddState(TestSet& testSet) {
            // { username, password, expected output }
            { Credentials("Jane Doe", "0; SELECT password FROM passwordList"), "", errorMessage }, // Jared
            { Credentials("w4shingt0nx4vier", "this_should_work'; SELECT * FROM passwordList WHERE password LIKE '%5%"), "", errorMessage }, // Paul
-           { Credentials("Brian_064", "mypassWord'; DELETE FROM table;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='mypassWordDELETEFROMtable';", errorMessage }, //Brian
+           { Credentials("Brian_064", "mypassWord'; //delete FROM table;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='mypassWord//deleteFROMtable';", errorMessage }, //Brian
            { Credentials("brian_is_cool", "000'; SELECT * FROM passwordList where 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='brian_is_cool' and passwd='000;SELECT*FROMpasswordListwherecc';", errorMessage }, // Kevin
            { Credentials("", ""), "SELECT authenticate FROM passwordList WHERE name='' and passwd='';", errorMessage } //chris4
    };
@@ -300,7 +300,7 @@ void testAddState(TestSet& testSet) {
    /// test & validate
    runTests(testSet);
 
-   delete testSet.testCases;
+   //delete testSet.testCases;
    testSet.testCases = nullptr;
 }
 
@@ -323,7 +323,7 @@ void testComment(TestSet& testSet) {
    /// test & validate
    runTests(testSet);
 
-   delete testSet.testCases;
+   //delete testSet.testCases;
    testSet.testCases = nullptr;
 }
 
