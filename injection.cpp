@@ -51,7 +51,7 @@ int main() {
 
 /*******************************************************************
  * genQuery():
- *      - Returns a SQL SELECT statement.
+ *      - Returns a SQL SELECT statement that relies on Username and Password.
  *******************************************************************/
 string genQuery(string username, string password) {
     return "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
@@ -59,34 +59,51 @@ string genQuery(string username, string password) {
 
 /*******************************************************************
  * genQueryWeak():
- *      - Strip the username and password of <>&;"-='
+ *      - Strip the username and password of harmful and invalid characters contained in invalidChars[] array
  *******************************************************************/
 string genQueryWeak(string username, string password) {
    string cleanUsername;
    string cleanPassword;
-   for (char & c : username) {
+
+   //Go through each character in given username
+   for (char c : username) {
       char invalidChars[] = {'<', '>', '&', ';', '"', '-', '=', '\'', ' ', '%', '#', '$', '(', ')', ','};
+      bool isValid = true;
+
+      //check if c exists in invalidChars
       for (char invalidChar : invalidChars) {
+         //if it exists, add nothing to string and invalidate character
          if (c == invalidChar) {
             cleanUsername += "";
-            break;
-         } else {
-            cleanUsername += c;
+            isValid = false;
             break;
          }
       }
+
+      //if character is still valid add it to string
+      if (isValid == true) {
+         cleanUsername += c;
+      }
    }
 
-   for (char & c : password) {
+   //Go through each character in given password
+   for (char c : password) {
       char invalidChars[] = {'<', '>', '&', ';', '"', '-', '=', '\'', ' ', '(', ')', ','};
+      bool isValid = true;
+
+      //check if c exists in invalidChars
       for (char invalidChar : invalidChars) {
+         //if it exists, add nothing to string and invalidate character
          if (c == invalidChar) {
             cleanPassword += "";
-            break;
-         } else {
-            cleanPassword += c;
+            isValid = false;
             break;
          }
+      }
+
+      //if character is still valid add it to string     
+      if (isValid == true) {
+         cleanPassword += c;
       }
    }
 
@@ -100,7 +117,7 @@ string genQueryWeak(string username, string password) {
  *       - Password: Allow only letters, numbers, and special characters (!@#$%^&:*._)
  *******************************************************************/
 string genQueryStrong(string username, string password) {
-   // Don't know for sure if solution works, but it should
+   
    string cleanUsername;
    string cleanPassword;
    for (char c : username) {
@@ -349,8 +366,8 @@ void testComment(TestSet& testSet) {
        const string username = testSet.testCases[i].input.username;
        const string password = testSet.testCases[i].input.password;
        cout << "\t   Input (username/password):\n"
-            << "\t      " << username << endl
-            << "\t      " << password << endl;
+            << "\t      " << "Username: " << username << endl
+            << "\t      " << "Password: "<< password << endl;
 
        /// Test
        const string actualOutput = testSet.functionTested(username, password);
@@ -360,12 +377,14 @@ void testComment(TestSet& testSet) {
          testSet.testCases[i].status = PASSED;
          testSet.testsPassedCount++;
          testsPassedCount++;
-         cout << "\t      PASSED: Nothing was injected\n";
+         cout << "\t      PASSED: Inputs are clean/sanitized\n"
+              << "\t         Actual   output: " << actualOutput << endl
+              << "\t         Expected output: " << testSet.testCases[i].expectedOutput << endl;
        } else {
          testSet.testCases[i].status = FAILED;
          cout << "\t      FAILED: " << testSet.testCases[i].errorMessage << endl
               << "\t         Actual   output: " << actualOutput << endl
-              << "\t         Expected output: " << testSet.testCases[i].expectedOutput << endl;
+              << "\t         Expected output: " << testSet.testCases[i].expectedOutput << endl << endl << endl;
        }
     }
 
