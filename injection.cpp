@@ -255,7 +255,7 @@ void testTautology(TestSet& testSet) {
    /// test & validate
    runTests(testSet);
 
-   //delete testSet.testCases;
+   //delete testSet.testCases; 
    testSet.testCases = nullptr;
 }
 
