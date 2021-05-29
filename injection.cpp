@@ -62,23 +62,36 @@ string genQuery(string username, string password) {
  *      - Strip the username and password of <>&;"-='
  *******************************************************************/
 string genQueryWeak(string username, string password) {
-   // SELECT authenticate FROM passwordList WHERE name='$Username' and passwd='$Password'
-   string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
-   string cleanQuery;
-   for (char & c : sqlQuery) {
-      char invalidChars[] = {'<', '>', '&', ';', '"', '-', '=', '\'', ' '};
+   string cleanUsername;
+   string cleanPassword;
+   for (char & c : username) {
+      char invalidChars[] = {'<', '>', '&', ';', '"', '-', '=', '\'', ' ', '%', '#', '$', '(', ')', ','};
       for (char invalidChar : invalidChars) {
          if (c == invalidChar) {
-            cleanQuery += "";
+            cleanUsername += "";
             break;
          } else {
-            cleanQuery += c;
+            cleanUsername += c;
             break;
          }
       }
    }
 
-   return cleanQuery;
+   for (char & c : password) {
+      char invalidChars[] = {'<', '>', '&', ';', '"', '-', '=', '\'', ' ', '(', ')', ','};
+      for (char invalidChar : invalidChars) {
+         if (c == invalidChar) {
+            cleanPassword += "";
+            break;
+         } else {
+            cleanPassword += c;
+            break;
+         }
+      }
+   }
+
+   string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + cleanUsername + "' and passwd='" + cleanPassword + "';";
+   return sqlQuery;
 }
 
 /*******************************************************************
@@ -245,11 +258,11 @@ void testTautology(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("Jane Doe", "fake_password' OR 'x' = 'x"), "", errorMessage }, // Jared
-           { Credentials("w4shingt0nx4vier", "this_should_work' OR 'a' = 'a"), "", errorMessage }, // Paul
-           { Credentials("Brian_064", "lol' OR '1' = '1"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='lol' OR '1' = '1';", errorMessage }, //Brian
-           { Credentials("alexanderHamilton#1776", "c' OR 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='alexanderHamilton#1776' and passwd='cORcc';", errorMessage }, // Kevin
-           { Credentials("homeStarLegend%$#", "takingout OR date"), "SELECT authenticate FROM passwordList WHERE name='homeStarLegend%$#' and passwd='takingoutORdate';", errorMessage } //chris2
+           { Credentials("Jane_Doe", "fake_password' OR 'x' = 'x"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='fake_passwordORxx';", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier", "this_should_work' OR 'a' = 'a"), "SELECT authenticate FROM passwordList WHERE name='w4shingt0nx4vier' and passwd='this_should_workORaa';", errorMessage }, // Paul
+           { Credentials("Brian_064", "lol' OR '1' = '1"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='lolOR11';", errorMessage }, //Brian
+           { Credentials("alexanderHamilton#1776", "c' OR 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='alexanderHamilton1776' and passwd='cORcc';", errorMessage }, // Kevin
+           { Credentials("homeStarLegend%$#", "takingout OR date"), "SELECT authenticate FROM passwordList WHERE name='homeStarLegend' and passwd='takingoutORdate';", errorMessage } //chris2
    };
 
    /// test & validate
@@ -268,11 +281,11 @@ void testUnion(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("Jane Doe", "testing' UNION INSERT INTO  passwordList(name, passwd) VALUES('Jane Doe', 'my_password')"), "", errorMessage }, //Jared
-           { Credentials("w4shingt0nx4vier", "this_should_work' UNION INSERT INTO passwordList(name, passwd) VALUES ('w4shingt0nx4vier', '509@pp1e')"), "", errorMessage }, // Paul
-           { Credentials("Brian", "myPassword' UNION SELECT * FROM passwordList;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='myPasswordUNIONSELECTFROMpasswordList';", errorMessage }, //Brian
+           { Credentials("Jane_Doe", "testing' UNION INSERT INTO  passwordList(name, passwd) VALUES('Jane Doe', 'my_password')"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='testingUNIONINSERTINTOpasswordListnamepasswdVALUESJaneDoemy_password';", errorMessage }, //Jared
+           { Credentials("w4shingt0nx4vier", "this_should_work' UNION INSERT INTO passwordList(name, passwd) VALUES ('w4shingt0nx4vier', '509@pp1e')"), "SELECT authenticate FROM passwordList WHERE name='w4shingt0nx4vier' and passwd='this_should_workUNIONINSERTINTOpasswordListnamepasswdVALUESw4shingt0nx4vier509@pp1e';", errorMessage }, // Paul
+           { Credentials("Brian_064", "myPassword' UNION SELECT * FROM passwordList;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='myPasswordUNIONSELECT*FROMpasswordList';", errorMessage }, //Brian
            { Credentials("ronWeasly", "alohamora' UNION SELECT * FROM passwordList WHERE 'x'='x"), "SELECT authenticate FROM passwordList WHERE name='ronWeasly' and passwd='alohamoraUNIONSELECT*FROMpasswordListWHERExx';", errorMessage }, // Kevin
-           { Credentials("wizardgandolf", "you are being hacked UNION SELECT "), "SELECT authenticate FROM passwordList WHERE name='wizardgandolf' and passwd='thisisthewizardpassword';", errorMessage } // chris3
+           { Credentials("wizardgandolf", "you are being hacked UNION SELECT "), "SELECT authenticate FROM passwordList WHERE name='wizardgandolf' and passwd='youarebeinghackedUNIONSELECT';", errorMessage } // chris3
    };
    /// test & validate
    runTests(testSet);
@@ -290,10 +303,10 @@ void testAddState(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("Jane Doe", "0; SELECT password FROM passwordList"), "", errorMessage }, // Jared
-           { Credentials("w4shingt0nx4vier", "this_should_work'; SELECT * FROM passwordList WHERE password LIKE '%5%"), "", errorMessage }, // Paul
-           { Credentials("Brian_064", "mypassWord'; //delete FROM table;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='mypassWord//deleteFROMtable';", errorMessage }, //Brian
-           { Credentials("brian_is_cool", "000'; SELECT * FROM passwordList where 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='brian_is_cool' and passwd='000;SELECT*FROMpasswordListwherecc';", errorMessage }, // Kevin
+           { Credentials("Jane_Doe", "0; SELECT password FROM passwordList"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='0SELECTpasswordFROMpasswordList';", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier", "this_should_work'; SELECT * FROM passwordList WHERE password LIKE '%5%"), "SELECT authenticate FROM passwordList WHERE name='w4shingt0nx4vier' and passwd='this_should_workSELECT*FROMpasswordListWHEREpasswordLIKE%5%';", errorMessage }, // Paul
+           { Credentials("Brian_064", "mypassWord'; delete FROM table;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='mypassWorddeleteFROMtable';", errorMessage }, //Brian
+           { Credentials("brian_is_cool", "000'; SELECT * FROM passwordList where 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='brian_is_cool' and passwd='000SELECT*FROMpasswordListwherecc';", errorMessage }, // Kevin
            { Credentials("", ""), "SELECT authenticate FROM passwordList WHERE name='' and passwd='';", errorMessage } //chris4
    };
 
@@ -313,10 +326,10 @@ void testComment(TestSet& testSet) {
    // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
-           { Credentials("Jane Doe'--", "false_password"), "", errorMessage }, // Jared
-           { Credentials("w4shingt0nx4vier'; --", "509@pp1e'; --"), "", errorMessage }, // Paul
+           { Credentials("Jane_Doe'--", "false_password"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='false_password';", errorMessage }, // Jared
+           { Credentials("w4shingt0nx4vier'; --", "509@pp1e'; --"), "SELECT authenticate FROM passwordList WHERE name='w4shingt0nx4vier' and passwd='509@pp1e';", errorMessage }, // Paul
            { Credentials("Brian_064' --", "anyPassWord"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='anyPassWord';", errorMessage }, //Brian
-           { Credentials("chris_is_awesome", "5stars'; -- this_is_a_comment:_"), "SELECT authenticate FROM passwordList WHERE name='chris_is_awesome' and passwd='5starsthis_is_a_comment_';", errorMessage }, // Kevin
+           { Credentials("chris_is_awesome", "5stars'; -- this_is_a_comment:_"), "SELECT authenticate FROM passwordList WHERE name='chris_is_awesome' and passwd='5starsthis_is_a_comment:_';", errorMessage }, // Kevin
            { Credentials("", ""), "SELECT authenticate FROM passwordList WHERE name='' and passwd='';", errorMessage }//chris5
    };
 
