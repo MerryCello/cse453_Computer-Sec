@@ -100,7 +100,11 @@ string genQueryWeak(string username, string password) {
  *       - Password: Allow only letters, numbers, and special characters (!@#$%^&:*._)
  *******************************************************************/
 string genQueryStrong(string username, string password) {
+<<<<<<< Updated upstream
    // Don't know for sure if solution works, but it should
+=======
+
+>>>>>>> Stashed changes
    string cleanUsername;
    string cleanPassword;
    for (char c : username) {
@@ -307,7 +311,7 @@ void testAddState(TestSet& testSet) {
            { Credentials("w4shingt0nx4vier", "this_should_work'; SELECT * FROM passwordList WHERE password LIKE '%5%"), "SELECT authenticate FROM passwordList WHERE name='w4shingt0nx4vier' and passwd='this_should_workSELECT*FROMpasswordListWHEREpasswordLIKE%5%';", errorMessage }, // Paul
            { Credentials("Brian_064", "mypassWord'; delete FROM table;"), "SELECT authenticate FROM passwordList WHERE name='Brian_064' and passwd='mypassWorddeleteFROMtable';", errorMessage }, //Brian
            { Credentials("brian_is_cool", "000'; SELECT * FROM passwordList where 'c'='c"), "SELECT authenticate FROM passwordList WHERE name='brian_is_cool' and passwd='000SELECT*FROMpasswordListwherecc';", errorMessage }, // Kevin
-           { Credentials("", ""), "SELECT authenticate FROM passwordList WHERE name='' and passwd='';", errorMessage } //chris4
+           { Credentials("poleroidMan", "; SELECT * FROM passwordList LEFT JOIN myOwnTable on passwordList.passwords=myOwnTable.passwords;"), "SELECT authenticate FROM passwordList WHERE name='poleroidMan' and passwd='SELECT*FROMpasswordListLEFTJOINmyOwnTableonpasswordList.passwordsmyOwnTable.passwords';", errorMessage } //chris4
    };
 
    /// test & validate
