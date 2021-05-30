@@ -1,3 +1,11 @@
+/*******************************************************************
+ * SQL Injection Mitigation: Kevin Foniciello, Brian Aguilar, Paul Semadeni, Jared Aston, Chris Van Kammen
+ *      This program will allow a user to select a mitigation type (no mitigation, weak , strong)
+ *      and will run 5 different test cases with 5 different examples of usernames and passwords each for the following types of input:
+ *      A valid input, a Tautology attack, a Union attack, an Additional Statement attack, and a Comment attack.
+ *      The program will then display the original input vs the sanitized output and whether or not it passes the test case.
+ *******************************************************************/
+
 #include <iostream>
 #include <string>
 #include <regex>
