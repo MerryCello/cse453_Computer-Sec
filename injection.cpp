@@ -11,13 +11,13 @@
 #include <regex>
 
 using namespace std;
-typedef string (*GenQueryFunction)(string, string);
+typedef string (*GenQueryFunction)(const string&, const string&);
 
 struct Credentials;
 struct TestSet;
-string genQuery(string, string);
-string genQueryWeak(string, string);
-string genQueryStrong(string, string);
+string genQuery(const string&, const string&);
+string genQueryWeak(const string&, const string&);
+string genQueryStrong(const string&, const string&);
 void runTestCases(char);
 void runTests(TestSet&);
 void testValid(TestSet&);
@@ -61,7 +61,7 @@ int main() {
  * genQuery():
  *      - Returns a SQL SELECT statement that relies on Username and Password.
  *******************************************************************/
-string genQuery(string username, string password) {
+string genQuery(const string & username, const string & password) {
     return "SELECT authenticate FROM passwordList WHERE name='" + username + "' and passwd='" + password + "';";
 }
 
@@ -69,7 +69,7 @@ string genQuery(string username, string password) {
  * genQueryWeak():
  *      - Strip the username and password of harmful and invalid characters contained in invalidChars[] array
  *******************************************************************/
-string genQueryWeak(string username, string password) {
+string genQueryWeak(const string & username, const string & password) {
    string cleanUsername;
    string cleanPassword;
 
@@ -89,7 +89,7 @@ string genQueryWeak(string username, string password) {
       }
 
       //if character is still valid add it to string
-      if (isValid == true) {
+      if (isValid) {
          cleanUsername += c;
       }
    }
@@ -110,13 +110,12 @@ string genQueryWeak(string username, string password) {
       }
 
       //if character is still valid add it to string     
-      if (isValid == true) {
+      if (isValid) {
          cleanPassword += c;
       }
    }
 
-   string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + cleanUsername + "' and passwd='" + cleanPassword + "';";
-   return sqlQuery;
+   return "SELECT authenticate FROM passwordList WHERE name='" + cleanUsername + "' and passwd='" + cleanPassword + "';";
 }
 
 /*******************************************************************
@@ -124,8 +123,7 @@ string genQueryWeak(string username, string password) {
  *       - Username: Allow only letters, numbers, ., and _
  *       - Password: Allow only letters, numbers, and special characters (!@#$%^&:*._)
  *******************************************************************/
-string genQueryStrong(string username, string password) {
-   
+string genQueryStrong(const string & username, const string & password) {
    string cleanUsername;
    string cleanPassword;
    for (char c : username) {
@@ -138,8 +136,7 @@ string genQueryStrong(string username, string password) {
          cleanPassword += c;
    }
 
-   string sqlQuery = "SELECT authenticate FROM passwordList WHERE name='" + cleanUsername + "' and passwd='" + cleanPassword + "';";
-   return sqlQuery;
+   return "SELECT authenticate FROM passwordList WHERE name='" + cleanUsername + "' and passwd='" + cleanPassword + "';";
 }
 
 
@@ -153,16 +150,10 @@ struct Credentials {
    string username;
    string password;
 };
-enum TestStatuses {
-   TODO = 0,
-   FAILED = 1,
-   PASSED = 2
-};
 struct TestCase {
    Credentials input;
    string expectedOutput;
    string errorMessage;
-   TestStatuses status = TODO;
 };
 struct TestSet {
    string title;
@@ -238,13 +229,11 @@ void runTestCases(char mitigationType) {
    /// Run the specified test
    else {
       cout << "Running set \"" << testSets[0].title << "\"...\n";
-      int testsPassedCount = 0;
       testValid(testSets[0]);
       testTautology(testSets[0]);
       testUnion(testSets[0]);
       testAddState(testSets[0]);
       testComment(testSets[0]);
-      testsPassedCount += testSets[0].testsPassedCount;
 
       cout << "**************************************************************************\n"
            << "*  " << testSets[0].testsPassedCount << "/25 tests passed for \"" << testSets[0].title << "\"\n"
@@ -257,7 +246,6 @@ void testValid(TestSet& testSet) {
    testSet.name = "Valid input";
    testSet.testsNumber = 5;
    string errorMessage = "Query not properly build with VALID input";
-   // TODO: setup tests
    testSet.testCases = new TestCase[5] {
       // { username, password, expected output }
            { Credentials("Jane_Doe", "7593156"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='7593156';", errorMessage }, // Jared
@@ -280,7 +268,6 @@ void testTautology(TestSet& testSet) {
    testSet.name = "Tautology exploitation";
    testSet.testsNumber = 5;
    string errorMessage = "Query failed due to a BOOLEAN attack";
-   // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane_Doe", "fake_password' OR 'x' = 'x"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='fake_passwordORxx';", errorMessage }, // Jared
@@ -303,7 +290,6 @@ void testUnion(TestSet& testSet) {
    testSet.name = "Union exploitation";
    testSet.testsNumber = 5;
    string errorMessage = "Query was altered to execute a UNION";
-   // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane_Doe", "testing' UNION INSERT INTO  passwordList(name, passwd) VALUES('Jane Doe', 'my_password')"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='testingUNIONINSERTINTOpasswordListnamepasswdVALUESJaneDoemy_password';", errorMessage }, //Jared
@@ -325,7 +311,6 @@ void testAddState(TestSet& testSet) {
    testSet.name = "Add State exploitation";
    testSet.testsNumber = 5;
    string errorMessage = "A state was added to the query";
-   // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane_Doe", "0; SELECT password FROM passwordList"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='0SELECTpasswordFROMpasswordList';", errorMessage }, // Jared
@@ -348,7 +333,6 @@ void testComment(TestSet& testSet) {
    testSet.name = "Comment exploitation";
    testSet.testsNumber = 5;
    string errorMessage = "Comments altered how the query should have run";
-   // TODO: setup tests
    testSet.testCases = new TestCase[5] {
            // { username, password, expected output }
            { Credentials("Jane_Doe'--", "false_password"), "SELECT authenticate FROM passwordList WHERE name='Jane_Doe' and passwd='false_password';", errorMessage }, // Jared
@@ -382,14 +366,12 @@ void testComment(TestSet& testSet) {
 
        /// Verify
        if (actualOutput == testSet.testCases[i].expectedOutput) {
-         testSet.testCases[i].status = PASSED;
          testSet.testsPassedCount++;
          testsPassedCount++;
          cout << "\t      PASSED: Inputs are clean/sanitized\n"
               << "\t         Actual   output: " << actualOutput << endl
               << "\t         Expected output: " << testSet.testCases[i].expectedOutput << endl;
        } else {
-         testSet.testCases[i].status = FAILED;
          cout << "\t      FAILED: " << testSet.testCases[i].errorMessage << endl
               << "\t         Actual   output: " << actualOutput << endl
               << "\t         Expected output: " << testSet.testCases[i].expectedOutput << endl << endl << endl;
