@@ -19,6 +19,7 @@ int main() {
    long number = 123456;
    void (*pointerFunction)() = fail;
    const char * message = failMessage;
+   cout << "message: " << (void *)message << endl;
 
    char x = 'X';
 
@@ -62,7 +63,7 @@ string displayCharArray(const char * p)
 {
    string output;
    for (int i = 0; i < 8; i++)
-       output += string(" ") + (p[i] >= ' ' && p[i] <= 'z' ? p[i] : '.');
+      output += string(" ") + (p[i] >= ' ' && p[i] <= 'z' ? p[i] : '.');
    return output;
 }
 
@@ -106,54 +107,74 @@ void two(long number)              // 345678
 
    char* pText = NULL;
    long* pNumber = NULL;
-   void (*pointerFunction)() = NULL;
-   const char* message = NULL;
+   StatusFunction* pPointerFunction = NULL;
+   char* pMessage = NULL;
    cout << "FAIL: " << (void*)fail << endl;
+
+   // Made these variablesto reducehow many times displayCharArray is called
+   string searchMessageValue = ":(";
+   string searchTextValue = displayCharArray("*MAIN**");
    for (long i = 150; i >= -4; i--) {  // You may need to change 24 to another number
-      ////////////////////////////////////////////////
       // Insert code here to display the callstack
       long * pTemp = (&bow) + i;
       pLong = pTemp;
       pChar = (char*)(pTemp);
 
-      if (displayCharArray(pChar) == displayCharArray("*MAIN**")) {
-         cout << "Found pText\n";
+      if (displayCharArray(pChar) == searchTextValue) {
+         cout << "Found text\n";
          pText = pChar;
       }
       else if (*pLong == 123456) {
          cout << "Found number\n";
          pNumber = pLong;
       }
-      else if (*((StatusFunction)pTemp) == (void*)fail) {
+      // Only get the FIRST pointer with the "fail" address
+      else if (!pPointerFunction && (StatusFunction)*pLong == fail) {
          cout << "Found pointerFunction\n";
-         pointerFunction = (StatusFunction)pTemp;
+         pPointerFunction = (StatusFunction*)pTemp;
       }
-      else if (displayCharArray(pChar) == displayCharArray(":(")) {
+      else if (displayCharArray(pChar) == searchMessageValue) {
          cout << "Found message\n";
-         message = pChar;
+         pMessage = pChar;
       }
+      else {
+         if (*(pTemp) == (long)failMessage) {
+            cout << "Found message\n";
+            *(pTemp) = (long)passMessage;
+         }
+       }
 
       cout << '[' << setw(4) << i << ']'
-        << setw(15) << pTemp
-        << setw(20) << hex << *pLong
-        << setw(20) << dec << *pLong
-        << setw(18) << displayCharArray(pChar)
-      //   << setw(18) << *pChar
-        << endl;
-      //
-      ////////////////////////////////////////////////
+           << setw(15) << pTemp
+           << setw(20) << hex << *pLong
+           << setw(20) << dec << *pLong
+           << setw(18) << displayCharArray(pChar)
+           //   << setw(18) << *pChar
+           << endl;
    }
-
-   ////////////////////////////////////////////////
    // Insert code here to change the variables in main()
 
    // change text in main() to "*main**" index 53
-   
+   if (pText) {
+      char temp[8] = "*main**";
+      for (int i = 0; i < 8; i++)
+         pText[i] = temp[i];
+   }
+
    // change number in main() to 654321 index 60
+   if (pNumber)
+      *pNumber = 654321;
 
    // change pointerFunction in main() to point to pass
+   if (pPointerFunction) {
+      *pPointerFunction = pass;
+   }
 
    // change message in main() to point to passMessage
+   if (pMessage) {
+      for (int i = 0; i < 3; i++)
+         pMessage[i] = passMessage[i];
+   }
 
    //
    ////////////////////////////////////////////////
