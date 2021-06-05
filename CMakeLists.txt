@@ -4,4 +4,5 @@ project(computerSecurity)
 set(CMAKE_CXX_STANDARD 14)
 
 #add_executable(computerSecurity pathDebunker.cpp)
-add_executable(computerSecurity injection.cpp)
+#add_executable(computerSecurity injection.cpp)
+add_executable(computerSecurity memoryOrganization.cpp.)
