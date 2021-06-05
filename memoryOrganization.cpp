@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 using namespace std;
+typedef void (*StatusFunction)();
 
 void one(long number);
 void two(long number);
@@ -13,12 +14,21 @@ const char * failMessage = ":(";
 /**********************************************
  * MAIN : The top of the callstack.
  **********************************************/
-int main()
-{
+int main() {
    char text[8] = "*MAIN**";
    long number = 123456;
    void (*pointerFunction)() = fail;
    const char * message = failMessage;
+
+   char x = 'X';
+
+   char * pointer = new char[10];
+
+   *pointer = 'X';
+
+   cout << "Code Address: " << (const void*)&x << endl;
+   cout << "Stack Address: " << &pointer << endl;
+   cout << "Heap Pointer: " << (const void*)(pointer) << endl;
 
    // display the initial values of the local variables
    cout << "main() : " << (void *)main << endl;
@@ -82,7 +92,7 @@ void two(long number)              // 345678
    char * pChar = NULL;
 
    // header for our table. Use these setw() offsets in your table
-   cout << '[' << setw(2) << 'i' << ']'
+   cout << '[' << setw(4) << 'i' << ']'
         << setw(15) << "address"
         << setw(20) << "hexadecimal"
         << setw(20) << "decimal"
@@ -93,11 +103,43 @@ void two(long number)              // 345678
         << "-------------------+"
         << "-------------------+"
         << "-----------------+\n";
-   for (long i = 24; i >= -4; i--)   // You may need to change 24 to another number
-   {
+
+   char* pText = NULL;
+   long* pNumber = NULL;
+   void (*pointerFunction)() = NULL;
+   const char* message = NULL;
+   cout << "FAIL: " << (void*)fail << endl;
+   for (long i = 150; i >= -4; i--) {  // You may need to change 24 to another number
       ////////////////////////////////////////////////
       // Insert code here to display the callstack
+      long * pTemp = (&bow) + i;
+      pLong = pTemp;
+      pChar = (char*)(pTemp);
 
+      if (displayCharArray(pChar) == displayCharArray("*MAIN**")) {
+         cout << "Found pText\n";
+         pText = pChar;
+      }
+      else if (*pLong == 123456) {
+         cout << "Found number\n";
+         pNumber = pLong;
+      }
+      else if (*((StatusFunction)pTemp) == (void*)fail) {
+         cout << "Found pointerFunction\n";
+         pointerFunction = (StatusFunction)pTemp;
+      }
+      else if (displayCharArray(pChar) == displayCharArray(":(")) {
+         cout << "Found message\n";
+         message = pChar;
+      }
+
+      cout << '[' << setw(4) << i << ']'
+        << setw(15) << pTemp
+        << setw(20) << hex << *pLong
+        << setw(20) << dec << *pLong
+        << setw(18) << displayCharArray(pChar)
+      //   << setw(18) << *pChar
+        << endl;
       //
       ////////////////////////////////////////////////
    }
@@ -105,9 +147,9 @@ void two(long number)              // 345678
    ////////////////////////////////////////////////
    // Insert code here to change the variables in main()
 
-   // change text in main() to "*main**"
-
-   // change number in main() to 654321
+   // change text in main() to "*main**" index 53
+   
+   // change number in main() to 654321 index 60
 
    // change pointerFunction in main() to point to pass
 
