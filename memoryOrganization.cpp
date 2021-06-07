@@ -19,7 +19,7 @@ int main() {
    long number = 123456;
    void (*pointerFunction)() = fail;
    const char * message = failMessage;
-   cout << "message: " << (void *)message << endl;
+//   cout << "message: " << (void *)message << endl;
 
    char x = 'X';
 
@@ -109,7 +109,7 @@ void two(long number)              // 345678
    long* pNumber = NULL;
    StatusFunction* pPointerFunction = NULL;
    char* pMessage = NULL;
-   cout << "FAIL: " << (void*)fail << endl;
+//   cout << "FAIL: " << (void*)fail << endl;
 
    // Made these variablesto reducehow many times displayCharArray is called
    string searchMessageValue = ":(";
@@ -121,35 +121,28 @@ void two(long number)              // 345678
       pChar = (char*)(pTemp);
 
       if (displayCharArray(pChar) == searchTextValue) {
-         cout << "Found text\n";
+//         cout << "Found text\n";
          pText = pChar;
       }
       else if (*pLong == 123456) {
-         cout << "Found number\n";
+//         cout << "Found number\n";
          pNumber = pLong;
       }
       // Only get the FIRST pointer with the "fail" address
       else if (!pPointerFunction && (StatusFunction)*pLong == fail) {
-         cout << "Found pointerFunction\n";
+//         cout << "Found pointerFunction\n";
          pPointerFunction = (StatusFunction*)pTemp;
       }
-      else if (displayCharArray(pChar) == searchMessageValue) {
-         cout << "Found message\n";
-         pMessage = pChar;
+      else if (*(pTemp) == (long)failMessage) {
+//         cout << "Found message\n";
+         *(pTemp) = (long)passMessage;
       }
-      else {
-         if (*(pTemp) == (long)failMessage) {
-            cout << "Found message\n";
-            *(pTemp) = (long)passMessage;
-         }
-       }
 
       cout << '[' << setw(4) << i << ']'
            << setw(15) << pTemp
            << setw(20) << hex << *pLong
            << setw(20) << dec << *pLong
            << setw(18) << displayCharArray(pChar)
-           //   << setw(18) << *pChar
            << endl;
    }
    // Insert code here to change the variables in main()
