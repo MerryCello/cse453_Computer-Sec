@@ -8,11 +8,11 @@ set(CMAKE_CXX_STANDARD 14)
 #add_executable(computerSecurity memoryOrganization.cpp)
 #add_executable(computerSecurity vulnerabilitiesAndExploits.cpp)
 add_executable(computerSecurity
-        authentication/lab12.cpp
-        authentication/control.h
-        authentication/interact.cpp
-        authentication/interact.h
-        authentication/message.cpp
-        authentication/message.h
-        authentication/messages.cpp
-        authentication/messages.h)
+        accessControl/lab12.cpp
+        accessControl/control.h
+        accessControl/interact.cpp
+        accessControl/interact.h
+        accessControl/message.cpp
+        accessControl/message.h
+        accessControl/messages.cpp
+        accessControl/messages.h)
