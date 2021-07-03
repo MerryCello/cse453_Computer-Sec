@@ -11,3 +11,5 @@ cmake-build-debug**/
 *.o
 *.out
 *.exe
+
+sandbox/
