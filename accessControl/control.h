@@ -6,10 +6,32 @@
  * Summary:
  *    This class stores the notion of Bell-LaPadula
  ************************************************************************/
-#ifndef PATHDEBUNKER_CPP_CONTROL_H
-#define PATHDEBUNKER_CPP_CONTROL_H
+#ifndef CONTROL_H
+#define CONTROL_H
 
-#pragma once
+#include <string>
+#include <map>
+#include "interact.h"
 
-// you may need to put something here...
+using namespace std;
+
+// #pragma once
+
+// The 4 different levels of security.
+enum Control {
+    Public, Confidential, Priviledged, Secret
+};
+
+// To make string/Control conversion easier
+map<string, Control> ControlMap = {
+   { "Public",       Public       },
+   { "Confidential", Confidential },  
+   { "Priviledged",  Priviledged  },
+   { "Secret",       Secret       }
+};
+
+bool securityConditionRead(int assetControl, int subjectControl);
+bool securityConditionWrite(int assetControl, int subjectControl);
+
+
 #endif //PATHDEBUNKER_CPP_CONTROL_H

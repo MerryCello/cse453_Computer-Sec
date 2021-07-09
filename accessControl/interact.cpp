@@ -23,11 +23,11 @@ using namespace std;
  *************************************************************/
 const User users[] =
         {
-                { "AdmiralAbe",     "password" },
-                { "CaptainCharlie", "password" },
-                { "SeamanSam",      "password" },
-                { "SeamanSue",      "password" },
-                { "SeamanSly",      "password" }
+                { "AdmiralAbe",     "password", Secret       },
+                { "CaptainCharlie", "password", Priviledged  },
+                { "SeamanSam",      "password", Confidential },
+                { "SeamanSue",      "password", Confidential },
+                { "SeamanSly",      "password", Confidential }
         };
 
 const int ID_INVALID = -1;
@@ -51,7 +51,13 @@ Interact::Interact(const string & userName,
  ****************************************************/
 void Interact::show() const
 {
-   pMessages->show(promptForId("display"));
+   int assetControl = pMessages->getMessageTextControl(promptForId("display"));
+   int subjectControl = users[idFromUser(userName)].accessControl;
+
+   if (securityConditionRead(assetControl, subjectControl))
+      pMessages->show(promptForId("display"));
+   else
+      displayAccessDenied();
 }
 
 /****************************************************
@@ -63,6 +69,16 @@ void Interact::display() const
    pMessages->display();
 }
 
+
+/****************************************************
+ * INTERACT :: DISPLAY_ACCESS_DENIED
+ * display an "access denied" message
+ ***************************************************/
+void Interact::displayAccessDenied() const {
+   cout << "*** ACCESS DENIED ***\n";
+}
+
+
 /****************************************************
  * INTERACT :: ADD
  * add a single message
@@ -71,7 +87,8 @@ void Interact::add()
 {
    pMessages->add(promptForLine("message"),
                   userName,
-                  promptForLine("date"));
+                  promptForLine("date"),
+                  users[idFromUser(userName)].accessControl);
 }
 
 /****************************************************
@@ -140,6 +157,12 @@ void Interact::authenticate(const string & userName,
    bool authenticated = false;
    if (ID_INVALID != id && password == string(users[id].password))
       authenticated = true;
+   // if (authenticated) {
+   //    subjectControl = users[id].accessControl;
+   // }
+   // else {
+   //    subjectControl = Public;
+   // }
 }
 
 /****************************************************

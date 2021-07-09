@@ -6,11 +6,11 @@
  * Summary:
  *    This class allows one user to interact with the system
  ************************************************************************/
-#ifndef PATHDEBUNKER_CPP_INTERACT_H
-#define PATHDEBUNKER_CPP_INTERACT_H
+#ifndef INTERACT_H
+#define INTERACT_H
 
 
-#pragma once
+// #pragma once
 
 #include <string>     // for convenience
 #include "messages.h" // to interact with the collection of messages
@@ -24,6 +24,7 @@ struct User
 {
    const char *name;
    const char *password;
+   int accessControl; 
 };
 
 /****************************************************
@@ -42,6 +43,9 @@ public:
 
    // display the set of messages
    void display() const;
+
+   // display an "access denied" message
+   void displayAccessDenied() const;
 
    // add a single message
    void add();

@@ -6,11 +6,11 @@
 * Summary:
 *    This class stores the notion of a message
 ************************************************************************/
-#ifndef PATHDEBUNKER_CPP_MESSAGE_H
-#define PATHDEBUNKER_CPP_MESSAGE_H
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 
-#pragma once
+// #pragma once
 
 #include <string>     // for convenience
 #include "control.h"  // for all the control stuff
@@ -29,10 +29,14 @@ public:
    // the most commonly used constructor: create a message
    Message(const std::string & text,
            const std::string & author,
-           const std::string & date);
+           const std::string & date,
+           const int & textControl);
 
    // determine the unique ID of this message
    int getID() const { return id; }
+
+   // determine the text control of this message
+   int getTextControl() const { return textControl; }
 
    // display the properties but not content of the message
    void displayProperties() const;
@@ -40,7 +44,7 @@ public:
    // display the content of the message
    void displayText() const;
 
-   // update the text componnet of the message
+   // update the text componet of the message
    void updateText(const std::string & newText);
 
    // clear out a message
@@ -53,6 +57,7 @@ private:
    std::string text;         // the textual content of this message
    std::string author;       // the author of this message
    std::string date;         // the date this message was created
+   int textControl;  // the confidentiallity level
 };
 
 

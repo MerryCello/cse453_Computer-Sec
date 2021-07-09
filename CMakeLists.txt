@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 14)
 #add_executable(computerSecurity vulnerabilitiesAndExploits.cpp)
 add_executable(computerSecurity
         accessControl/lab12.cpp
+        accessControl/control.cpp
         accessControl/control.h
         accessControl/interact.cpp
         accessControl/interact.h

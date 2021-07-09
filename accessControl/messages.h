@@ -6,11 +6,11 @@
  * Summary:
  *    This class stores the notion of a collection of messages
  ************************************************************************/
-#ifndef PATHDEBUNKER_CPP_MESSAGES_H
-#define PATHDEBUNKER_CPP_MESSAGES_H
+#ifndef MESSAGES_H
+#define MESSAGES_H
 
 
-#pragma once
+// #pragma once
 
 #include <string>     // for convenience
 #include <list>       // to store the messages
@@ -26,6 +26,9 @@ class Messages
 public:
    // constructor: read a file to fill the messages
    Messages(const char * fileName) { readMessages(fileName); }
+
+   // get a message by it's id
+   int getMessageTextControl(int messageId);
 
    // display the list of messages
    void display() const;
@@ -43,7 +46,8 @@ public:
    // add a new message
    void add(const std::string & text,
             const std::string & author,
-            const std::string & date);
+            const std::string & date,
+            const int & textControl);
 
 private:
    // the list of messages

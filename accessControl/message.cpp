@@ -23,18 +23,19 @@ Message ::  Message()
    id = idNext++;
 }
 
-
 /**************************************************
  * MESSAGE NON-DEFAULT CONSTRUCTOR
  * Create a message and fill it
  **************************************************/
 Message::Message(const string & text,
                  const string & author,
-                 const string & date)
+                 const string & date,
+                 const int & textControl)
 {
    this->text = text;
    this->author = author;
    this->date = date;
+   this->textControl = textControl;
    this->id = idNext++;
    empty = false;
 }

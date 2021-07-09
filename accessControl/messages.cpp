@@ -18,6 +18,18 @@
 
 using namespace std;
 
+// get a message's unique text control
+int Messages::getMessageTextControl(int messageId)
+{
+   for (list <Message> :: const_iterator it = messages.begin(); 
+         it != messages.end(); 
+         ++it)
+   {
+      if (it->getID() == messageId)
+         return it->getTextControl();
+   }
+}
+
 /***********************************************
  * MESSAGES :: DISPLAY
  * display the list of messages
@@ -75,9 +87,10 @@ void Messages::remove(int id)
  **********************************************/
 void Messages::add(const string & text,
                    const string & author,
-                   const string & date)
+                   const string & date,
+                   const int & textControl)
 {
-   Message message(text, author, date);
+   Message message(text, author, date, textControl);
    messages.push_back(message);
 }
 
@@ -111,7 +124,7 @@ void Messages::readMessages(const char * fileName)
 
       if (!fin.fail())
       {
-         Message message(text, author, date);
+         Message message(text, author, date, ControlMap[textControl]);
          messages.push_back(message);
       }
    }

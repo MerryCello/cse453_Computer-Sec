@@ -16,7 +16,9 @@
 #include "messages.h" // the collection of messages
 using namespace std;
 
-const char * FILE_NAME = "messages.txt";
+// TODO: change this back to what it was
+// const char * FILE_NAME = "messages.txt";
+const char * FILE_NAME = "C:\\Users\\kevin\\Downloads\\messages.txt";
 
 
 /***********************************************
