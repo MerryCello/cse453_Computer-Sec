@@ -14,25 +14,37 @@
 
 using namespace std;
 
-// #pragma once
-
 // The 4 different levels of security.
-enum Control {
-    Public, Confidential, Privileged, Secret
+
+enum Classifications {
+   Public, Confidential, Privileged, Secret
 };
 
-// To make string/Control conversion easier
-// Issue compiling because this is a global variable
-// TODO: Put this and Control in a class that overloads operators to fit the needs of the program
-map<string, Control> ControlMap = {
-   { "Public",       Public       },
-   { "Confidential", Confidential },  
-   { "Privileged",  Privileged  },
-   { "Secret",       Secret       }
+class Control {
+public:
+   Control() : control(0) {};
+   Control(int control);
+   Control(string control);
+
+   static bool securityConditionRead(int assetControl, int subjectControl);
+   static bool securityConditionWrite(int assetControl, int subjectControl);
+
+   Control& operator = (const string& rhs);
+   Control& operator = (const int& rhs);
+   operator int() const { return control; }
+private:
+   // The enum of type Classifications
+   int control;
+   // To make string/Control conversion easier
+   map<string, int> classificationsMap = {
+           { "Public",       Public       },
+           { "Confidential", Confidential },
+           { "Privileged",  Privileged    },
+           { "Secret",       Secret       }
+   };
+
+   bool isValidClassification(int);
+   bool isValidClassification(const string&);
 };
-
-bool securityConditionRead(int assetControl, int subjectControl);
-bool securityConditionWrite(int assetControl, int subjectControl);
-
 
 #endif //PATHDEBUNKER_CPP_CONTROL_H

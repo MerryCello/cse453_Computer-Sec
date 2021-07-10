@@ -10,8 +10,6 @@
 #define INTERACT_H
 
 
-// #pragma once
-
 #include <string>     // for convenience
 #include "messages.h" // to interact with the collection of messages
 #include "control.h"  // all the Bell-LaPadula stuff
@@ -24,7 +22,7 @@ struct User
 {
    const char *name;
    const char *password;
-   int accessControl; 
+   Control accessControl;
 };
 
 /****************************************************
@@ -45,7 +43,7 @@ public:
    void display() const;
 
    // display an "access denied" message
-   void displayAccessDenied() const;
+   static void displayAccessDenied() ;
 
    // add a single message
    void add();
