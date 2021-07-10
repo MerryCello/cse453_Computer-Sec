@@ -24,7 +24,7 @@ using namespace std;
 const User users[] =
         {
                 { "AdmiralAbe",     "password", Secret       },
-                { "CaptainCharlie", "password", Priviledged  },
+                { "CaptainCharlie", "password", Privileged  },
                 { "SeamanSam",      "password", Confidential },
                 { "SeamanSue",      "password", Confidential },
                 { "SeamanSly",      "password", Confidential }

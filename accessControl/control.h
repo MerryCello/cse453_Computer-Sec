@@ -11,7 +11,6 @@
 
 #include <string>
 #include <map>
-#include "interact.h"
 
 using namespace std;
 
@@ -19,14 +18,15 @@ using namespace std;
 
 // The 4 different levels of security.
 enum Control {
-    Public, Confidential, Priviledged, Secret
+    Public, Confidential, Privileged, Secret
 };
 
 // To make string/Control conversion easier
+// TODO: Issue compiling because this is a global variable
 map<string, Control> ControlMap = {
    { "Public",       Public       },
    { "Confidential", Confidential },  
-   { "Priviledged",  Priviledged  },
+   { "Priviledged",  Privileged  },
    { "Secret",       Secret       }
 };
 
