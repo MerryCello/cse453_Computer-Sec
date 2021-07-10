@@ -43,6 +43,7 @@ Interact::Interact(const string & userName,
    authenticate(userName, password);
    this->userName = userName;
    this->pMessages = &messages;
+   cout << "Your class: " << users[idFromUser(userName)].accessControl << endl;
 }
 
 /****************************************************
@@ -54,7 +55,7 @@ void Interact::show() const
    int assetControl = pMessages->getMessageTextControl(promptForId("display"));
    int subjectControl = users[idFromUser(userName)].accessControl;
 
-   if (securityConditionRead(assetControl, subjectControl))
+   if (Control::securityConditionRead(assetControl, subjectControl))
       pMessages->show(promptForId("display"));
    else
       displayAccessDenied();
@@ -74,7 +75,7 @@ void Interact::display() const
  * INTERACT :: DISPLAY_ACCESS_DENIED
  * display an "access denied" message
  ***************************************************/
-void Interact::displayAccessDenied() const {
+void Interact::displayAccessDenied() {
    cout << "*** ACCESS DENIED ***\n";
 }
 
@@ -157,12 +158,6 @@ void Interact::authenticate(const string & userName,
    bool authenticated = false;
    if (ID_INVALID != id && password == string(users[id].password))
       authenticated = true;
-   // if (authenticated) {
-   //    subjectControl = users[id].accessControl;
-   // }
-   // else {
-   //    subjectControl = Public;
-   // }
 }
 
 /****************************************************

@@ -10,8 +10,6 @@
 #define MESSAGES_H
 
 
-// #pragma once
-
 #include <string>     // for convenience
 #include <list>       // to store the messages
 #include "control.h"  // all the Bell-LaPadula code
@@ -28,7 +26,7 @@ public:
    Messages(const char * fileName) { readMessages(fileName); }
 
    // get a message by it's id
-   int getMessageTextControl(int messageId);
+   Control getMessageTextControl(int messageId);
 
    // display the list of messages
    void display() const;

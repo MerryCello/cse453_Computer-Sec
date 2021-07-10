@@ -10,8 +10,6 @@
 #define MESSAGE_H
 
 
-// #pragma once
-
 #include <string>     // for convenience
 #include "control.h"  // for all the control stuff
 
@@ -30,13 +28,13 @@ public:
    Message(const std::string & text,
            const std::string & author,
            const std::string & date,
-           const int & textControl);
+           const Control & textControl);
 
    // determine the unique ID of this message
    int getID() const { return id; }
 
    // determine the text control of this message
-   int getTextControl() const { return textControl; }
+   Control getTextControl() const { return textControl; }
 
    // display the properties but not content of the message
    void displayProperties() const;
@@ -57,7 +55,7 @@ private:
    std::string text;         // the textual content of this message
    std::string author;       // the author of this message
    std::string date;         // the date this message was created
-   int textControl;          // the confidentiallity level
+   Control textControl;          // the confidentiallity level
 };
 
 

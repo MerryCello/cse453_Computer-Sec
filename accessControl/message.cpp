@@ -16,7 +16,7 @@ using namespace std;
  * MESSAGE DEFAULT CONSTRUCTOR
  * Set a message to empty
  **************************************************/
-Message ::  Message()
+Message:: Message()
 {
    empty = true;
    text = "Empty";
@@ -30,7 +30,7 @@ Message ::  Message()
 Message::Message(const string & text,
                  const string & author,
                  const string & date,
-                 const int & textControl)
+                 const Control & textControl)
 {
    this->text = text;
    this->author = author;

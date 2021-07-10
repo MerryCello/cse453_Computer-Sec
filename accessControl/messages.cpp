@@ -19,7 +19,7 @@
 using namespace std;
 
 // get a message's unique text control
-int Messages::getMessageTextControl(int messageId)
+Control Messages::getMessageTextControl(int messageId)
 {
    for (list <Message> :: const_iterator it = messages.begin(); 
          it != messages.end(); 
@@ -125,7 +125,7 @@ void Messages::readMessages(const char * fileName)
 
       if (!fin.fail())
       {
-         Message message(text, author, date, ControlMap[textControl]);
+         Message message(text, author, date, Control(textControl));
          messages.push_back(message);
       }
    }
