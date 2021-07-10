@@ -28,6 +28,7 @@ int Messages::getMessageTextControl(int messageId)
       if (it->getID() == messageId)
          return it->getTextControl();
    }
+   return 0;
 }
 
 /***********************************************
