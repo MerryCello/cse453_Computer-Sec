@@ -22,11 +22,12 @@ enum Control {
 };
 
 // To make string/Control conversion easier
-// TODO: Issue compiling because this is a global variable
+// Issue compiling because this is a global variable
+// TODO: Put this and Control in a class that overloads operators to fit the needs of the program
 map<string, Control> ControlMap = {
    { "Public",       Public       },
    { "Confidential", Confidential },  
-   { "Priviledged",  Privileged  },
+   { "Privileged",  Privileged  },
    { "Secret",       Secret       }
 };
 
