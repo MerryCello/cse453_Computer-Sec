@@ -9,7 +9,7 @@ OBJDIR = ./.makefileObjects
 ##############################################################
 # The main rule
 ##############################################################
-accessControl.exe: mkObjDir ${OBJDIR}/control.o ${OBJDIR}/message.o \
+accessControl.out: mkObjDir ${OBJDIR}/control.o ${OBJDIR}/message.o \
                             ${OBJDIR}/messages.o ${OBJDIR}/interact.o \
                             ${OBJDIR}/lab12.o
 	g++ -o ${OBJDIR}/*.o -g -std=c++11

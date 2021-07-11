@@ -12,7 +12,7 @@
 #include <iostream>   // standard input and output
 #include <fstream>    // the messages are read from a file
 #include <cassert>    // because I am paraniod
-#include "control.h"  // all the Bell-LaPadula code
+#include "./control.h"  // all the Bell-LaPadula code
 #include "message.h"  // all the code about a single message
 #include "messages.h" // a collection messages
 
@@ -21,14 +21,14 @@ using namespace std;
 // get a message's unique text control
 Control Messages::getMessageTextControl(int messageId)
 {
-   for (list <Message> :: const_iterator it = messages.begin(); 
-         it != messages.end(); 
+   for (list <Message> :: const_iterator it = messages.begin();
+         it != messages.end();
          ++it)
    {
       if (it->getID() == messageId)
-         return it->getTextControl();
+         return Control(it->getTextControl());
    }
-   return 0;
+   return Control(0);
 }
 
 /***********************************************
@@ -91,7 +91,7 @@ void Messages::add(const string & text,
                    const string & date,
                    const int & textControl)
 {
-   Message message(text, author, date, textControl);
+   Message message(text, author, date, Control(textControl));
    messages.push_back(message);
 }
 
