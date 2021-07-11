@@ -23,8 +23,8 @@ enum Classifications {
 class Control {
 public:
    Control() : control(0) {};
-   Control(int control);
-   Control(string control);
+   explicit Control(int control);
+   explicit Control(string control);
 
    static bool securityConditionRead(int assetControl, int subjectControl);
    static bool securityConditionWrite(int assetControl, int subjectControl);

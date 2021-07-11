@@ -7,7 +7,7 @@
  *    This class stores the notion of Bell-LaPadula
  ************************************************************************/
 #include <string>
-#include "control.h"
+#include "./control.h"
 
 using namespace std;
 

@@ -7,13 +7,13 @@
  *    This class allows one user to interact with the system
  ************************************************************************/
 
-#include <iostream>   // standard input and output
-#include <string>     // for convenience
-#include <cassert>    // because I am paraniod
-#include <stdlib.h>   // for atoi
-#include "messages.h" // to interact with the collection of messages
-#include "control.h"  // all the Bell-LaPadula stuff
-#include "interact.h" // the interact class and User structure
+#include <iostream>    // standard input and output
+#include <string>      // for convenience
+#include <cassert>     // because I am paraniod
+#include <stdlib.h>    // for atoi
+#include "messages.h"  // to interact with the collection of messages
+#include "./control.h" // all the Bell-LaPadula stuff
+#include "interact.h"  // the interact class and User structure
 
 using namespace std;
 
@@ -23,11 +23,11 @@ using namespace std;
  *************************************************************/
 const User users[] =
         {
-                { "AdmiralAbe",     "password", Secret       },
-                { "CaptainCharlie", "password", Privileged  },
-                { "SeamanSam",      "password", Confidential },
-                { "SeamanSue",      "password", Confidential },
-                { "SeamanSly",      "password", Confidential }
+                { "AdmiralAbe",     "password", Control(Secret)       },
+                { "CaptainCharlie", "password", Control(Privileged)   },
+                { "SeamanSam",      "password", Control(Confidential) },
+                { "SeamanSue",      "password", Control(Confidential) },
+                { "SeamanSly",      "password", Control(Confidential) }
         };
 
 const int ID_INVALID = -1;
@@ -40,10 +40,9 @@ Interact::Interact(const string & userName,
                    const string & password,
                    Messages & messages)
 {
-   authenticate(userName, password);
    this->userName = userName;
    this->pMessages = &messages;
-   cout << "Your class: " << users[idFromUser(userName)].accessControl << endl;
+   Control control = authenticate(userName, password);
 }
 
 /****************************************************
@@ -52,11 +51,12 @@ Interact::Interact(const string & userName,
  ****************************************************/
 void Interact::show() const
 {
-   int assetControl = pMessages->getMessageTextControl(promptForId("display"));
+   int messageId = promptForId("display");
+   int assetControl = pMessages->getMessageTextControl(messageId);
    int subjectControl = users[idFromUser(userName)].accessControl;
 
    if (Control::securityConditionRead(assetControl, subjectControl))
-      pMessages->show(promptForId("display"));
+      pMessages->show(messageId);
    else
       displayAccessDenied();
 }
@@ -89,7 +89,7 @@ void Interact::add()
    pMessages->add(promptForLine("message"),
                   userName,
                   promptForLine("date"),
-                  users[idFromUser(userName)].accessControl);
+                  users[idFromUser(userName)].accessControl); // New message inherits user's accessControl
 }
 
 /****************************************************
@@ -98,9 +98,16 @@ void Interact::add()
  ****************************************************/
 void Interact::update()
 {
-   int id = promptForId("update");
-   pMessages->update(id,
-                     promptForLine("message"));
+   int messageId = promptForId("update");
+   int assetControl = pMessages->getMessageTextControl(messageId);
+   int subjectControl = users[idFromUser(userName)].accessControl;
+
+   if (Control::securityConditionWrite(assetControl, subjectControl)) {
+      pMessages->update(messageId, promptForLine("message"));
+   }
+   else {
+      displayAccessDenied();
+   }
 }
 
 /****************************************************
@@ -109,7 +116,16 @@ void Interact::update()
  ***************************************************/
 void Interact::remove()
 {
-   pMessages->remove(promptForId("delete"));
+   int messageId = promptForId("delete");
+   int assetControl = pMessages->getMessageTextControl(messageId);
+   int subjectControl = users[idFromUser(userName)].accessControl;
+
+   if (Control::securityConditionRead(assetControl, subjectControl)) {
+      pMessages->remove(messageId);
+   }
+   else {
+      displayAccessDenied();
+   }
 }
 
 /****************************************************
@@ -151,13 +167,23 @@ int Interact::promptForId(const char * verb) const
  * INTERACT :: AUTHENTICATION
  * authenticate the user: find their control level
  ****************************************************/
-void Interact::authenticate(const string & userName,
-                            const string & password) const
+Control Interact::authenticate(const string & userName,
+                            const string & password)
 {
    int id = idFromUser(userName);
    bool authenticated = false;
    if (ID_INVALID != id && password == string(users[id].password))
       authenticated = true;
+
+   if (authenticated) {
+      return users[id].accessControl;
+   }
+   else {
+      this->userName = "unAuth"; // Change it to something else that's not in the users' list
+
+      //Return Public access
+      return Control(0);
+   }
 }
 
 /****************************************************

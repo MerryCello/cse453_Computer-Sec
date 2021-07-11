@@ -12,7 +12,7 @@
 
 #include <string>     // for convenience
 #include <list>       // to store the messages
-#include "control.h"  // all the Bell-LaPadula code
+#include "./control.h"  // all the Bell-LaPadula code
 #include "message.h"  // all the code about a single message
 
 /***********************************************

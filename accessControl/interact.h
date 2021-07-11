@@ -12,7 +12,7 @@
 
 #include <string>     // for convenience
 #include "messages.h" // to interact with the collection of messages
-#include "control.h"  // all the Bell-LaPadula stuff
+#include "./control.h"  // all the Bell-LaPadula stuff
 
 /**************************************************************
  * USER
@@ -20,6 +20,11 @@
  *************************************************************/
 struct User
 {
+   // User(string name, string password, Control control) {
+   //    name = name.c_str();
+   //    password = password.c_str();
+   //    accessControl = control;
+   // }
    const char *name;
    const char *password;
    Control accessControl;
@@ -65,8 +70,8 @@ private:
    int promptForId(const char * verb) const;
 
    // authenticate the user;
-   void authenticate(const std::string & userName,
-                     const std::string & password) const;
+   Control authenticate(const std::string & userName,
+                     const std::string & password);
 
    // find the ID of a given user
    int idFromUser(const std::string & userName) const;

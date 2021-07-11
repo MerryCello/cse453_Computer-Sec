@@ -11,7 +11,7 @@
 
 
 #include <string>     // for convenience
-#include "control.h"  // for all the control stuff
+#include "./control.h"  // for all the control stuff
 
 
 /**************************************************
