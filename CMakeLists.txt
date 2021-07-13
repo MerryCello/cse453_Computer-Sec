@@ -1,13 +1,18 @@
 cmake_minimum_required(VERSION 3.17)
-project(computerSecurity)
+project(Homographs)
+project(InjectionMitigation)
+project(MemoryOrg)
+project(Vulnerabilities)
+project(AccessControl)
+project(Encryption)
 
 set(CMAKE_CXX_STANDARD 14)
 
-#add_executable(computerSecurity pathDebunker.cpp)
-#add_executable(computerSecurity injection.cpp)
-#add_executable(computerSecurity memoryOrganization.cpp)
-#add_executable(computerSecurity vulnerabilitiesAndExploits.cpp)
-add_executable(computerSecurity
+add_executable(Homographs pathDebunker.cpp)
+add_executable(InjectionMitigation injection.cpp)
+add_executable(MemoryOrg memoryOrganization.cpp)
+add_executable(Vulnerabilities vulnerabilitiesAndExploits.cpp)
+add_executable(AccessControl
         accessControl/control.h
         accessControl/control.cpp
         accessControl/message.h
@@ -17,3 +22,14 @@ add_executable(computerSecurity
         accessControl/interact.h
         accessControl/interact.cpp
         accessControl/lab12.cpp)
+add_executable(Encryption
+        encryption/cipher.h
+        encryption/cipher01.h
+        encryption/cipher02.h
+        encryption/cipher03.h
+        encryption/cipher04.h
+        encryption/cipher05.h
+        encryption/cipher06.h
+        encryption/cipher07.h
+        encryption/example.h
+        encryption/ui.cpp)
