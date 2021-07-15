@@ -12,10 +12,10 @@
 class Cipher03 : public Cipher
 {
 public:
-   virtual std::string getPseudoAuth()  { return "pseudocode author"; }
-   virtual std::string getCipherName()  { return "cipher name"; }
-   virtual std::string getEncryptAuth() { return "encrypt author"; }
-   virtual std::string getDecryptAuth() { return "decrypt author"; }
+   virtual std::string getPseudoAuth()  { return "Paul Semadeni"; }
+   virtual std::string getCipherName()  { return "Baconian Cipher"; }
+   virtual std::string getEncryptAuth() { return "Paul Semadeni"; }
+   virtual std::string getDecryptAuth() { return "Paul Semadeni"; }
 
    /***********************************************************
     * GET CIPHER CITATION
@@ -23,9 +23,12 @@ public:
     ***********************************************************/
    virtual std::string getCipherCitation()
    {
-      return std::string("citation");
+      std::string s;
+      s += "Dupuy, Jr., Paul J. “The Advancement of Learning”, 2017, Accessed: July 15, 2021. \nAvailable [Online] ";
+      s += "http://home.hiwaay.net/~paul/bacon/advancement/book6ch1.html";
+      return s;
    }
-   
+
    /**********************************************************
     * GET PSEUDOCODE
     * Returns the pseudocode as a string to be used by the caller.
