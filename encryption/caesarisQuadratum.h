@@ -1,8 +1,19 @@
 /********************************************************************
-* Header:
-*    Implement your cipher here. You can view 'example.h' to see the
-*    completed Caesar Cipher example.
-********************************************************************/
+ * File Author:
+ *   Kevin Foniciello
+ *
+ * Cypher name:
+ *   Caesar's square
+ * Description:
+ *   This cypher will basically just shuffle the plaintext. All cyphered
+ *   text has a length of chars that form a square (i.e., 4, 9, 16, 25, etc.).
+ *   The chars need to be put into that square to decode and encode.
+ *   For example:
+ *      Plaintext: 123456789 == forms a square ==> 147
+ *                                                 258
+ *                                                 369
+ *      Encoded: 147258369
+ *******************************************************************/
 #ifndef CIPHER01_H
 #define CIPHER01_H
 

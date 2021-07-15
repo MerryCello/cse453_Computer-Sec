@@ -12,10 +12,10 @@
 #include <string>
 #include <vector>
 
-#include "cipher.h"    // Base Cipher Class
-#include "example.h"   // Bro Helfrich example Cipher
-#include "cipher01.h"  // Include the other 7 header files
-#include "cipher02.h"
+#include "cipher.h"             // Base Cipher Class
+#include "example.h"            // Bro Helfrich example Cipher
+#include "caesarisQuadratum.h"  // Kevin's Cypher
+#include "cipher02.h"           // Include the other 7 header files
 #include "cipher03.h"
 #include "cipher04.h"
 #include "cipher05.h"

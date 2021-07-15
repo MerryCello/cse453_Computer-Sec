@@ -24,7 +24,7 @@ add_executable(AccessControl
         accessControl/lab12.cpp)
 add_executable(Encryption
         encryption/cipher.h
-        encryption/cipher01.h
+        encryption/caesarisQuadratum.h
         encryption/cipher02.h
         encryption/cipher03.h
         encryption/cipher04.h
