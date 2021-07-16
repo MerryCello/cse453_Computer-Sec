@@ -7,6 +7,7 @@ cmake-build-debug**/
 
 # Mac
 .DS_Store/
+.DS_Store
 
 *.o
 *.out
