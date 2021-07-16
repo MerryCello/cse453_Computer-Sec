@@ -5,79 +5,168 @@
  * Cypher name:
  *   Caesar's square
  * Description:
- *   This cypher will basically just shuffle the plaintext. All cyphered
- *   text has a length of chars that form a square (i.e., 4, 9, 16, 25, etc.).
+ *   Transposition cypher.
+ *   All cyphered text has a length of chars that form a square (i.e., 4, 9, 16, 25, etc.).
  *   The chars need to be put into that square to decode and encode.
  *   For example:
  *      Plaintext: 123456789 == forms a square ==> 147
  *                                                 258
  *                                                 369
  *      Encoded: 147258369
+ *
+ * Sources:
+ *    https://www.dcode.fr/caesar-box-cipher
+ *    https://everything2.com/title/caesar+square
+ *    https://www.google.com/books/edition/Digital_Fortress/_FKPcZcTKNMC?gbpv=1 (pg 19)
  *******************************************************************/
-#ifndef CIPHER01_H
-#define CIPHER01_H
+#ifndef CAESARIS_QUADRATUM_H
+#define CAESARIS_QUADRATUM_H
+
+#include <string>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
 
 /********************************************************************
  * CLASS
  *******************************************************************/
-class Cipher01 : public Cipher
-{
+class CaesarisQuadratum : public Cipher {
+private:
+   string filler;
+
+   static bool isPerfectSquare(const long long x) { return (sqrt(x) - floor(sqrt(x))) == 0; }
+
+   static long long getNextPerfectSquare(const long long x) {
+      if (isPerfectSquare(x))
+         return x;
+
+      // Finding first perfect square
+      // number greater than n
+      long long x1 = x + 1;
+      while (true) {
+         if (isPerfectSquare(x1))
+            return x1;
+         else
+            x1++;
+      }
+   }
+
 public:
-   virtual std::string getPseudoAuth()  { return "pseudocode author"; }
-   virtual std::string getCipherName()  { return "cipher name"; }
-   virtual std::string getEncryptAuth() { return "encrypt author"; }
-   virtual std::string getDecryptAuth() { return "decrypt author"; }
+   CaesarisQuadratum() { string str = "•"; this->filler = str[0]; }
+
+   virtual string getPseudoAuth()  { return "Kevin Foniciello"; }
+   virtual string getCipherName()  { return "Caesar's Square";  }
+   virtual string getEncryptAuth() { return "Kevin Foniciello"; }
+   virtual string getDecryptAuth() { return "Kevin Foniciello"; }
 
    /***********************************************************
     * GET CIPHER CITATION
     * Returns the citation from which we learned about the cipher
     ***********************************************************/
-   virtual std::string getCipherCitation()
-   {
-      return std::string("citation");
+   virtual string getCipherCitation() {
+      string s;
+      s += "everything2.com (2004), ";
+      s += "\"Everything 2 - Caesar Square\', \n   retrieved: ";
+      s += "https://everything2.com/title/caesar+square";
+      return s;
    }
    
    /**********************************************************
     * GET PSEUDOCODE
     * Returns the pseudocode as a string to be used by the caller.
     **********************************************************/
-   virtual std::string getPseudocode()
-   {
-      std::string str;
+   virtual string getPseudocode() {
+      string str;
 
-      // TODO: please format your pseudocode
-      // The encrypt pseudocode
-      str =  "insert the encryption pseudocode\n";
+      // The encryptCase pseudocode
+      str =  "encrypt(plainText, password)\n"
+             "   size <- plainText.size()\n"
+             "   perfectSquare <- getNextPerfectSquare(size)\n"
+             "   widthSize <- sqrt(perfectSquare)\n"
+             "   pt <- plainText\n"
+             "   FOR i <- 0 WHILE i < (perfectSquare - size) INCR_BY i++\n"
+             "      pt.append(filler)\n"
+             "   FOR | i <- 0                                              |\n"
+             "       | WHILE (i + 1) != perfectSquare                      |\n"
+             "       | INCR (IF (i + widthSize >= perfectSquare) THEN i++) |\n"
+             "       |      AND (i <- (i + widthSize) MOD perfectSquare)   |\n"
+             "      cypherText.append(pt[i])\n"
+             "   cypherText.append(pt[perfectSquare - 1])\n"
+             "   RETURN cypherText\n\n";
 
-      // The decrypt pseudocode
-      str += "insert the decryption pseudocode\n";
+      // The decryptCase pseudocode
+      str += "decrypt(cipherText, password)\n"
+             "   plainText = encrypt(cypherText, password)\n"
+             "   plainText.erase(remove(plainText.begin(), plainText.end(), filler), plainText.end())\n"
+             "   RETURN plainText\n\n";
+
+      // helper routine
+      str += "getNextPerfectSquare(x)\n"
+             "   IF isPerfectSquare(x)\n"
+             "      RETURN x\n"
+             "   x++\n"
+             "   WHILE TRUE\n"
+             "      IF isPerfectSquare(x)\n"
+             "         RETURN x\n"
+             "      ELSE\n"
+             "         x++\n\n";
+
+      // helper routine
+      str += "isPerfectSquare(x)"
+             "   RETURN (sqrt(x) - floor(sqrt(x))) IS_EQUAL_TO 0\n\n";
 
       return str;
    }
 
    /**********************************************************
     * ENCRYPT
-    * TODO: ADD description
+    * A visual description says more with less comments:
+    *      Plaintext: 123456789 == forms a square ==> 147
+    *                                                 258
+    *                                                 369
+    *      Encoded: 147258369
+    *      
+    *      if plaintext.size is not a perfect square,
+    *      then the rest is filled to be the size of a perfect square
+    * @param password not needed to encrypt
     **********************************************************/
-   virtual std::string encrypt(const std::string & plainText, 
-                               const std::string & password)
-   {
-      std::string cipherText = plainText;
-      // TODO - Add your code here
-      return cipherText;
+   virtual string encrypt(const string & plainText, const string & password) {
+      string cypherText;
+
+      // Prep plaintext before shuffling
+      long long size = plainText.size();
+      long long perfectSquare = getNextPerfectSquare(size);
+      long widthSize = (long)sqrt(perfectSquare);
+      string pt(plainText);
+      for (int i = 0; i < (int)(perfectSquare - size); i++)
+         pt += filler;
+
+      // shuffle
+      for (long long i = 0;
+           (i + 1) != perfectSquare;
+           i += ((i + widthSize) >= perfectSquare ? 1 : 0), i = (i + widthSize) % perfectSquare) {
+         cypherText += pt[i];
+      }
+      // add the last character that got skipped
+      cypherText += *(--(pt.end()));
+
+      return cypherText;
    }
 
    /**********************************************************
     * DECRYPT
-    * TODO: ADD description
+    * Works the same as the encrypt function
+    * @param password not used to decrypt
     **********************************************************/
-   virtual std::string decrypt(const std::string & cipherText, 
-                               const std::string & password)
-   {
-      std::string plainText = cipherText;
-      // TODO - Add your code here
+   virtual string decrypt(const string & cypherText, const string & password) {
+      string plainText = encrypt(cypherText, password);
+
+      // Sift out filler chars
+      plainText.erase(remove(plainText.begin(), plainText.end(), filler[0]), plainText.end());
+
       return plainText;
    }
 };
 
-#endif // CIPHER01_H
+#endif // CAESARIS_QUADRATUM_H

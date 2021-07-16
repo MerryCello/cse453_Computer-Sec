@@ -46,7 +46,7 @@ public:
 
       // load the ciphers into the cipher vector
       cipher.push_back(new Example);  // add the example Cipher
-      cipher.push_back(new Cipher01); // add other 7 Ciphers
+      cipher.push_back(new CaesarisQuadratum); // add other 7 Ciphers
       cipher.push_back(new Cipher02);
       cipher.push_back(new Cipher03);
       cipher.push_back(new Cipher04);
