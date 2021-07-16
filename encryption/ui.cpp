@@ -183,6 +183,4 @@ int main()
       interface.getText(); // get the plaintext and password
       interface.getReport(index); // generate the report
    }
-
-   return 0;
 }
