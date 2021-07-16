@@ -64,7 +64,7 @@ public:
       int nOptions = cipher.size();
 
       // display the options
-      cout << "What cipher do you want to test?\n";
+      cout << "What cipher do you want to test? (-1 to quit)\n";
       for (int i = 0; i != nOptions; i++)
       {
          string nCipher = cipher[i]->getCipherName();
@@ -98,6 +98,8 @@ public:
             cin.clear();
             cin.ignore(256, '\n');
          }
+         else if (option == -1)
+            break;
          else if (option < 0 || option > nOptions)
             cout << "ERROR - value is outside the accepted range\n";
          else
@@ -172,13 +174,15 @@ int main()
    UI interface;
    int index;
 
-   index = interface.menu(); // show the menu and get cipher index
+   while (true) {
+      index = interface.menu(); // show the menu and get cipher index
 
-   if (index == -1) // if index == -1 then quit
-      return 0;
+      if (index == -1) // if index == -1 then quit
+         return 0;
 
-   interface.getText(); // get the plaintext and password
-   interface.getReport(index); // generate the report
+      interface.getText(); // get the plaintext and password
+      interface.getReport(index); // generate the report
+   }
 
    return 0;
 }
