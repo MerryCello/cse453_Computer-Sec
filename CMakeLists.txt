@@ -25,8 +25,8 @@ add_executable(AccessControl
 add_executable(Encryption
         encryption/cipher.h
         encryption/caesarisQuadratum.h
-        encryption/cipher02.h
-        encryption/cipher03.h
+        encryption/ZigZagRoute.h
+        encryption/Baconian.h
         encryption/cipher04.h
         encryption/cipher05.h
         encryption/cipher06.h

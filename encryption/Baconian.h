@@ -12,7 +12,7 @@
 /********************************************************************
  * CLASS
  *******************************************************************/
-class Cipher03 : public Cipher
+class Baconian : public Cipher
 {
 public:
    virtual std::string getPseudoAuth()  { return "Paul Semadeni"; }
