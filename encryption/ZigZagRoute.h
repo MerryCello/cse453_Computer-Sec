@@ -66,17 +66,114 @@ public:
 
       // TODO: please format your pseudocode
       // The encrypt pseudocode
-      str =  "insert the encryption pseudocode\n";
+      str =  "--ENCRYPT PSEUDOCODE--\n";
+      str +=  "intitialize cipherText\n";
+      str +=  "intitialize gridText to plaintext plus password\n";
+      str +=  "\n";
+      str +=  "initialize columns to password's size\n";
+      str +=  "initialize rows to gridText's size\n";
+      str +=  "\n";
+      str +=  "set row to zero\n";
+      str +=  "set col to zero\n";
+      str +=  "set colStart to zero\n";
+      str +=  "set colEnd to columns size minus one\n";
+      str +=  "\n";
+      str +=  "while counter is less than size of gridText starting from 0, loop through gridText characters\n";
+      str +=  "    if the current gridText character is valid\n";
+      str +=  "        set current grid coordinates to the gridText character\n";
+      str +=  "\n";
+      str +=  "        increment col by one\n";
+      str +=  "\n";
+      str +=  "        if col is greater than colEnd\n";
+      str +=  "            set col to zero\n";
+      str +=  "            increment row\n";
+      str +=  "\n";
+      str +=  "set row back to 0\n";
+      str +=  "set col back to 0\n";
+      str +=  "initialize direction to 'forward'\n";
+      str +=  "\n";
+      str +=  "while counter is less than gridText size starting from zero, increment through the grid\n";
+      str +=  "    if direction equals 'forward'\n";
+      str +=  "        add the value of the current grid coordinates to cipherText\n";
+      str +=  "        increment col by one\n";
+      str +=  "\n";
+      str +=  "        if col is greater than colEnd\n";
+      str +=  "            set col to colEnd\n";
+      str +=  "            increment row by one\n";
+      str +=  "            change direction to 'backward'\n";
+      str +=  "\n";
+      str +=  "    if direction equals 'backward'\n";
+      str +=  "        add the value of the current grid coordinates to cipherText\n";
+      str +=  "        decrement col by one\n";
+      str +=  "\n";
+      str +=  "        if col is less than colStart\n";
+      str +=  "            set col to colStart\n";
+      str +=  "            increment row by one\n";
+      str +=  "            change direction to 'forward'\n";
+      str +=  "\n";
+      str +=  "return the cipherText\n";
+      str +=  "\n";
+      str +=  "\n";
 
       // The decrypt pseudocode
-      str += "insert the decryption pseudocode\n";
+      str +=  "--DECRYPT PSEUDOCODE--\n";
+      str +=  "intitialize plainText\n";
+      str +=  "intitialize gridText to cipherText plus password\n";
+      str +=  "\n";
+      str +=  "initialize columns to password's size\n";
+      str +=  "initialize rows to gridText's size\n";
+      str +=  "\n";
+      str +=  "set row to zero\n";
+      str +=  "set col to zero\n";
+      str +=  "set colStart to zero\n";
+      str +=  "set colEnd to columns size minus one\n";
+      str +=  "\n";
+      str +=  "while counter is less than size of gridText starting from 0, loop through gridText characters\n";
+      str +=  "    if the current gridText character is valid\n";
+      str +=  "        set current grid coordinates to the gridText character\n";
+      str +=  "\n";
+      str +=  "        increment col by one\n";
+      str +=  "\n";
+      str +=  "        if col is greater than colEnd\n";
+      str +=  "            set col to zero\n";
+      str +=  "            increment row\n";
+      str +=  "\n";
+      str +=  "set row back to 0\n";
+      str +=  "set col back to 0\n";
+      str +=  "initialize direction to 'forward'\n";
+      str +=  "\n";
+      str +=  "while counter is less than gridText size starting from zero, increment through the grid\n";
+      str +=  "    if direction equals 'forward'\n";
+      str +=  "        add the value of the current grid coordinates to plainText\n";
+      str +=  "        increment col by one\n";
+      str +=  "\n";
+      str +=  "        if col is greater than colEnd\n";
+      str +=  "            set col to colEnd\n";
+      str +=  "            increment row by one\n";
+      str +=  "            change direction to 'backward'\n";
+      str +=  "\n";
+      str +=  "    if direction equals 'backward'\n";
+      str +=  "        add the value of the current grid coordinates to plainText\n";
+      str +=  "        decrement col by one\n";
+      str +=  "\n";
+      str +=  "        if col is less than colStart\n";
+      str +=  "            set col to colStart\n";
+      str +=  "            increment row by one\n";
+      str +=  "            change direction to 'forward'\n";
+      str +=  "\n";
+      str +=  "return the substring of plainText up until were it matches the password\n";
 
       return str;
    }
 
    /**********************************************************
-    * ENCRYPT
-    * TODO: ADD description
+   * ENCRYPT
+   * will create a two dimensional grid using the password size
+   * for the row size and the plaintext + password size for the columns. Then,
+   * the characters of the plaintext + password text will be added into the grid
+   * one by one. After, the characters in the grid will be appended to the ciphertext
+   * one by one in a zig zag pattern from the top left of the grid all the way to the
+   * end of it. The cipherText will then be returned.
     **********************************************************/
    virtual std::string encrypt(const std::string & plainText,
                                const std::string & password)
@@ -141,9 +238,11 @@ public:
    }
 
    /**********************************************************
-    * DECRYPT
-    * TODO: ADD description
-    **********************************************************/
+   * DECRYPT
+   * the ciphertext will be added into the same grid
+   * in reverse and the reverse of the pattern (minus the size of the password)
+   * will be used to derive the original plaintext.
+   **********************************************************/
    virtual std::string decrypt(const std::string & cipherText,
                                const std::string & password)
    {
