@@ -15,9 +15,9 @@
 #include "cipher.h"             // Base Cipher Class
 #include "example.h"            // Bro Helfrich example Cipher
 #include "caesarisQuadratum.h"  // Kevin's Cypher
-#include "cipher02.h"           // Include the other 7 header files
-#include "cipher03.h"
-#include "cipher04.h"
+#include "ZigZagRoute.h"
+#include "Baconian.h"
+#include "cipher04.h"           // Include the other 7 header files
 #include "cipher05.h"
 #include "cipher06.h"
 #include "cipher07.h"
@@ -46,9 +46,9 @@ public:
 
       // load the ciphers into the cipher vector
       cipher.push_back(new Example);  // add the example Cipher
-      cipher.push_back(new Cipher01); // add other 7 Ciphers
-      cipher.push_back(new Cipher02);
-      cipher.push_back(new Cipher03);
+      cipher.push_back(new CaesarisQuadratum); // add other 7 Ciphers
+      cipher.push_back(new ZigZagRoute);
+      cipher.push_back(new Baconian);
       cipher.push_back(new Cipher04);
       cipher.push_back(new Cipher05);
       cipher.push_back(new Cipher06);

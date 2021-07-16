@@ -39,7 +39,7 @@ using namespace std;
 /********************************************************************
  * CLASS
  *******************************************************************/
-class Cipher02 : public Cipher
+class ZigZagRoute : public Cipher
 {
 public:
    virtual std::string getPseudoAuth()  { return "Brian Aguilar"; }
