@@ -87,10 +87,10 @@ public:
              "   pt <- plainText\n"
              "   FOR i <- 0 WHILE i < (perfectSquare - size) INCR_BY i++\n"
              "      pt.append(filler)\n"
-             "   FOR | i <- 0                                              |\n"
-             "       | WHILE (i + 1) != perfectSquare                      |\n"
-             "       | INCR (IF (i + widthSize >= perfectSquare) THEN i++) |\n"
-             "       |      AND (i <- (i + widthSize) MOD perfectSquare)   |\n"
+             "   FOR | i <- 0                                                     |\n"
+             "       | WHILE (i + 1) != perfectSquare                             |\n"
+             "       | INCR i by 1 IF (i+widthSize >= perfectSquare),             |\n"
+             "       |      then ADD widthSize, then MOD the sum by perfectSquare |\n"
              "      cypherText.append(pt[i])\n"
              "   cypherText.append(pt[perfectSquare - 1])\n"
              "   RETURN cypherText\n\n";
@@ -145,7 +145,7 @@ public:
       // shuffle
       for (long long i = 0;
            (i + 1) != perfectSquare;
-           i += ((i + widthSize) >= perfectSquare ? 1 : 0), i = (i + widthSize) % perfectSquare) {
+           i = (i + widthSize + ((i + widthSize) >= perfectSquare)) % perfectSquare) {
          cypherText += pt[i];
       }
       // add the last character that got skipped
