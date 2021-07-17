@@ -221,6 +221,7 @@ int main()
 
 #ifdef DEMO
       system(SLEEP);
+      system(SLEEP);
       system("cls");
       system("clear");
 #endif
