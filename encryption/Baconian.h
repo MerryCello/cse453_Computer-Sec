@@ -27,7 +27,7 @@ public:
    virtual std::string getCipherCitation()
    {
       std::string s;
-      s += "Dupuy, Jr., Paul J. “The Advancement of Learning”, 2017, Accessed: July 15, 2021. \nAvailable [Online] ";
+      s += "Dupuy, Jr., Paul J. \"The Advancement of Learning\", 2017, Accessed: July 15, 2021. \nAvailable [Online] ";
       s += "http://home.hiwaay.net/~paul/bacon/advancement/book6ch1.html";
       return s;
    }

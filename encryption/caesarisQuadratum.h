@@ -67,7 +67,7 @@ public:
    virtual string getCipherCitation() {
       string s;
       s += "everything2.com (2004), ";
-      s += "\"Everything 2 - Caesar Square\', \n   retrieved: ";
+      s += "\"Everything 2 - Caesar Square\", \n   retrieved: ";
       s += "https://everything2.com/title/caesar+square";
       return s;
    }

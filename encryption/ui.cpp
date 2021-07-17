@@ -22,6 +22,12 @@
 #include "cipher06.h"
 #include "cipher07.h"
 
+//#define DEMO // Demo mode
+#ifdef DEMO
+   #define SLEEP "sleep 1.5"
+   #define MAX_LINES 25
+#endif
+
 using namespace std;
 
 /********************************************************************
@@ -151,17 +157,47 @@ public:
            << cipher[index]->getDecryptAuth() << endl;
       cout << "==================================="
            << "===================================\n";
+#ifdef DEMO
+      system(SLEEP);
+#endif
       cout << "Citation:\n"
            << cipher[index]->getCipherCitation() << endl;
       cout << "==================================="
            << "===================================\n";
+#ifdef DEMO
+      system(SLEEP);
+#endif
       cout << "Plain text:    " << plaintext << endl;
       cout << "Cipher text:   " << encrypted << endl;
       cout << "Decipher text: " << decrypted << endl;
       cout << "==================================="
            << "===================================\n";
-      cout << "Pseudocode:\n"
-           << cipher[index]->getPseudocode() << endl;
+#ifdef DEMO
+      system(SLEEP);
+#endif
+      cout << "Pseudocode:\n";
+
+#ifdef DEMO
+      int i = 0;
+      bool slept = true;
+      cout << setw(4) << left << i+1 ;
+      for (const char c : cipher[index]->getPseudocode()) {
+         cout << c ;
+
+         if (c == '\n') {
+            i++;
+            cout << setw(4) << left << i+1 ;
+            slept = false;
+         }
+
+         if (!(i % MAX_LINES) && !slept) {
+            system(SLEEP);
+            slept = true;
+         }
+      }
+#else
+      cout << cipher[index]->getPseudocode() << endl;
+#endif
    }
 };
 
@@ -182,5 +218,11 @@ int main()
 
       interface.getText(); // get the plaintext and password
       interface.getReport(index); // generate the report
+
+#ifdef DEMO
+      system(SLEEP);
+      system("cls");
+      system("clear");
+#endif
    }
 }
