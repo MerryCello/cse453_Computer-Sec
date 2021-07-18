@@ -75,12 +75,12 @@ public:
             formatMsg = 'Q';
             position += 1;
          }
-         string tpLeft = to_string(alphabet[alphabet.find(message)]);
-         string btmRight = to_string(alphabet[alphabet.find(formatMsg)]);
+//         string tpLeft = to_string(alphabet[alphabet.find(message)]);
+//         string btmRight = to_string(alphabet[alphabet.find(formatMsg)]);
          // TODO: fix. What are you trying to do here? You're trying to access password like it's a 2D array
-         string square1 = password[0][(19 * floor(int(tpLeft.c_str()) / 5)) + int(btmRight.c_str()) % 5];
-         string square2 = password[1][(19 * floor(int(btmRight.c_str()) / 5)) + int(tpLeft.c_str()) % 5];
-         cipherText += (square1 + square2);
+//         string square1 = password[0][(19 * floor(int(tpLeft.c_str()) / 5)) + int(btmRight.c_str()) % 5];
+//         string square2 = password[1][(19 * floor(int(btmRight.c_str()) / 5)) + int(tpLeft.c_str()) % 5];
+//         cipherText += (square1 + square2);
       }
       return cipherText;
    }
@@ -104,12 +104,12 @@ public:
             formatMsg = 'Q';
             position += 1;
          }
-         string tpLeft = to_string(alphabet[alphabet.find(message)]);
-         string btmRight = to_string(alphabet[alphabet.find(message)]);
+//         string tpLeft = to_string(alphabet[alphabet.find(message)]);
+//         string btmRight = to_string(alphabet[alphabet.find(message)]);
          // TODO: fix. What are you trying to do here? You're trying to access password like it's a 2D array
-         string square1 = password[0][(19 * floor(int(tpLeft.c_str()) / 5)) + int(btmRight.c_str()) % 5];
-         string square2 = password[1][(19 * floor(int(btmRight.c_str()) / 5)) + int(tpLeft.c_str()) % 5];
-         plainText += square1 + square2;
+//         string square1 = password[0][(19 * floor(int(tpLeft.c_str()) / 5)) + int(btmRight.c_str()) % 5];
+//         string square2 = password[1][(19 * floor(int(btmRight.c_str()) / 5)) + int(tpLeft.c_str()) % 5];
+//         plainText += square1 + square2;
       }
       return plainText;
    }
