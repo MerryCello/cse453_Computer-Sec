@@ -12,10 +12,10 @@
 class Cipher07 : public Cipher
 {
 public:
-   virtual std::string getPseudoAuth()  { return "pseudocode author"; }
+   virtual std::string getPseudoAuth()  { return "Christopher Van Kammen"; }
    virtual std::string getCipherName()  { return "cipher name"; }
-   virtual std::string getEncryptAuth() { return "encrypt author"; }
-   virtual std::string getDecryptAuth() { return "decrypt author"; }
+   virtual std::string getEncryptAuth() { return "Christopher Van Kammen"; }
+   virtual std::string getDecryptAuth() { return "Christopher Van Kammen"; }
 
    /***********************************************************
     * GET CIPHER CITATION
@@ -23,7 +23,7 @@ public:
     ***********************************************************/
    virtual std::string getCipherCitation()
    {
-      return std::string("citation");
+      return std::string("Simon Singh. (n.d.). Crypto. Practical Cryptography. http://practicalcryptography.com/ciphers/classical-era/simple-substitution/");
    }
    
    /**********************************************************
@@ -36,7 +36,7 @@ public:
 
       // TODO: please format your pseudocode
       // The encrypt pseudocode
-      str =  "insert the encryption pseudocode\n";
+      str =  "";
 
       // The decrypt pseudocode
       str += "insert the decryption pseudocode\n";
@@ -51,8 +51,13 @@ public:
    virtual std::string encrypt(const std::string & plainText,
                                const std::string & password)
    {
-      std::string cipherText = plainText;
-      // TODO - Add your code here
+       int count = 0;
+      std::string cipherText = "";
+      for (int i = plain.length(); i = > 0; i--)
+      {
+          cipherText += stubstituion.find(plaintext[count])->second;
+          count++;
+      }
       return cipherText;
    }
 
@@ -64,9 +69,206 @@ public:
                                const std::string & password)
    {
       std::string plainText = cipherText;
-      // TODO - Add your code here
+     
+          for (int i = cipherText.length(); i = > 0; i--)
+          {
+              plaintext+= substitutionReverse.find(cipherText[count])->second;
+              count++;
+          }
       return plainText;
    }
 };
 
+std::map<char, char> substitution {
+           { 'a', "q" },
+           { 'b', "w" },
+           { 'c', "e" },
+           { 'd', "r" },
+           { 'e', "t" },
+           { 'f', "y" },
+           { 'g', "u" },
+           { 'h', "i" },
+           { 'i', "o" },
+           { 'j', "p" },
+           { 'k', "[" },
+           { 'l', "]" },
+           { 'm', "a" },
+           { 'n', "s" },
+           { 'o', "d" },
+           { 'p', "f" },
+           { 'q', "g" },
+           { 'r', "h" },
+           { 's', "j" },
+           { 't', "k" },
+           { 'u', "l" },
+           { 'v', ";" },
+           { 'w', "1" },
+           { 'x', "z" },
+           { 'y', "x" },
+           { 'z', "c" },
+           { 'A', "v" },
+           { 'B', "b" },
+           { 'C', "n" },
+           { 'D', "m" },
+           { 'E', "m" },
+           { 'F', "," },
+           { 'G', "." },
+           { 'H', "/" },
+           { 'I', "Q" },
+           { 'J', "W" },
+           { 'K', "E" },
+           { 'L', "R" },
+           { 'M', "T" },
+           { 'N', "T" },
+           { 'O', "Y" },
+           { 'P', "U" },
+           { 'Q', "I" },
+           { 'R', "O" },
+           { 'S', "P" },
+           { 'T', "{" },
+           { 'U', "}" },
+           { 'V', "|" },
+           { 'W', "A" },
+           { 'X', "S" },
+           { 'Y', "D" },
+           { 'Z', "F" },
+           { '0', "G" },
+           { '1', "H" },
+           { '2', "J" },
+           { '3', "K" },
+           { '4', "L" },
+           { '5', "Z" },
+           { '6', "X" },
+           { '7', "C" },
+           { '8', "V" },
+           { '9', "B" },
+           { '!', "N" },
+           { '@', "M" },
+           { '#', "<" },
+           { '$', ">" },
+           { '%', "?" },
+           { '^', "2" },
+           { '&', "3" },
+           { '*', "4" },
+           { '(', "5" },
+           { ')', "6" },
+           { '-', "7" },
+           { '_', "8" },
+           { '=', "9" },
+           { '+', "0" },
+           { '[', "-" },
+           { '{', "_" },
+           { ']', "+" },
+           { '}', "=" },
+           { '|', "!" },
+           { ';', "@" },
+           { ':', "#" },
+           { '\'',"$" },
+           { '<', "^" },
+           { ',', "&" },
+           { '>', "*" },
+           { '/', ")" },
+           { '?', "`" },
+           { ' ', "~" },
+           { '\n', "("},
+           { '\t', "%"}
+};
+
+std::map<char, char> substitutionReverse{
+           { "q", "a" },
+           { "w", "b" },
+           { "e", "c" },
+           { "r", "d" },
+           { "t", "e" },
+           { "y", "f" },
+           { "u", "g" },
+           { "i", "h" },
+           { "o", "i" },
+           { "p", "j" },
+           { "[", "k" },
+           { "]", "l" },
+           { "a", "m" },
+           { "s", "n" },
+           { "d", "o" },
+           { "f", "p" },
+           { "g", "q" },
+           { "h", "r" },
+           { "j", "s" },
+           { "k", "t" },
+           { "l", "u" },
+           { ";", "v" },
+           { "1", "w" },
+           { "z", "x" },
+           { "x", "y" },
+           { "c", "z" },
+           { "v", "A" },
+           { "b", "B" },
+           { "n", "C" },
+           { "m", "D" },
+           { "m", "E" },
+           { ",", "F" },
+           { ".", "G" },
+           { "/", "H" },
+           { "Q", "I" },
+           { "W", "J" },
+           { "E", "K" },
+           { "R", "L" },
+           { "T", "M" },
+           { "T", "N" },
+           { "Y", "O" },
+           { "U", "P" },
+           { "I", "Q" },
+           { "O", "R" },
+           { "P", "S" },
+           { "{", "T" },
+           { "}", "U" },
+           { "|", "V" },
+           { "A", "W" },
+           { "S", "X" },
+           { "D", "Y" },
+           { "F", "Z" },
+           { "G", "0" },
+           { "H", "1" },
+           { "J", "2" },
+           { "K", "3" },
+           { "L", "4" },
+           { "Z", "5" },
+           { "X", "6" },
+           { "C", "7" },
+           { "V", "8" },
+           { "B", "9" },
+           { "N", "!" },
+           { "M", "@" },
+           { "<", "#" },
+           { ">", "$" },
+           { "?", "%" },
+           { "2", "^" },
+           { "3", "&" },
+           { "4", "*" },
+           { "5", "(" },
+           { "6", ")" },
+           { "7", "-" },
+           { "8", "_" },
+           { "9", "=" },
+           { "0", "+" },
+           { "-", "[" },
+           { "_", "{" },
+           { "+", "]" },
+           { "=", "}" },
+           { "!", "|" },
+           { "@", ";" },
+           { "#", ":" },
+           { "$", "\'"},
+           { "^", "<" },
+           { "&", "," },
+           { "*", ">" },
+           { ")", "/" },
+           { "`", "?" },
+           { "~", " " },
+           {"(", "\n" },
+           {"%", "\t" }
+};
+
+
+};
 #endif // CIPHER07_H

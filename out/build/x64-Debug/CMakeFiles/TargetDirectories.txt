@@ -1,0 +1,8 @@
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/Vulnerabilities.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/Homographs.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/InjectionMitigation.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/Encryption.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/AccessControl.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/MemoryOrg.dir
+C:/Users/cdvan/source/repos/MerryCello/cse453/out/build/x64-Debug/CMakeFiles/edit_cache.dir
