@@ -20,7 +20,7 @@
 #include "fourSquare.h"         // Jared Aston's cypher
 #include "cipher05.h"           // Include the other 3 header files
 #include "cipher06.h"
-#include "cipher07.h"
+#include "Substitution.h"
 
 //#define DEMO // Demo mode
 #ifdef DEMO
@@ -58,7 +58,7 @@ public:
       cipher.push_back(new FourSquare);
       cipher.push_back(new Cipher05); // add other 3 Ciphers
       cipher.push_back(new Cipher06);
-      cipher.push_back(new Cipher07);
+      cipher.push_back(new Substitution);
    }
 
    /************************************************************

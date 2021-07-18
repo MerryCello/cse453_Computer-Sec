@@ -30,6 +30,6 @@ add_executable(Encryption
         encryption/fourSquare.h
         encryption/cipher05.h
         encryption/cipher06.h
-        encryption/cipher07.h
+        encryption/Substitution.h
         encryption/example.h
         encryption/ui.cpp)
