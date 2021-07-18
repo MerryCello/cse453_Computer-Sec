@@ -27,7 +27,7 @@ add_executable(Encryption
         encryption/caesarisQuadratum.h
         encryption/ZigZagRoute.h
         encryption/Baconian.h
-        encryption/cipher04.h
+        encryption/fourSquare.h
         encryption/cipher05.h
         encryption/cipher06.h
         encryption/cipher07.h

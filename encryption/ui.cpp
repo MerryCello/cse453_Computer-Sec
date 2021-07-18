@@ -14,11 +14,11 @@
 
 #include "cipher.h"             // Base Cipher Class
 #include "example.h"            // Bro Helfrich example Cipher
-#include "caesarisQuadratum.h"  // Kevin's Cypher
-#include "ZigZagRoute.h"
-#include "Baconian.h"
-#include "cipher04.h"           // Include the other 7 header files
-#include "cipher05.h"
+#include "caesarisQuadratum.h"  // Kevin Foniciello's cypher
+#include "ZigZagRoute.h"        // Brian Aguilar's cypher
+#include "Baconian.h"           // Paul Semadeni's cypher
+#include "fourSquare.h"         // Jared Aston's cypher
+#include "cipher05.h"           // Include the other 3 header files
 #include "cipher06.h"
 #include "cipher07.h"
 
@@ -52,11 +52,11 @@ public:
 
       // load the ciphers into the cipher vector
       cipher.push_back(new Example);  // add the example Cipher
-      cipher.push_back(new CaesarisQuadratum); // add other 7 Ciphers
+      cipher.push_back(new CaesarisQuadratum);
       cipher.push_back(new ZigZagRoute);
       cipher.push_back(new Baconian);
-      cipher.push_back(new Cipher04);
-      cipher.push_back(new Cipher05);
+      cipher.push_back(new FourSquare);
+      cipher.push_back(new Cipher05); // add other 3 Ciphers
       cipher.push_back(new Cipher06);
       cipher.push_back(new Cipher07);
    }
